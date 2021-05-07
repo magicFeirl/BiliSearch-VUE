@@ -117,7 +117,7 @@ export default {
         this.no_error = false;
         return;
       }
-
+  
       this.loaded = true;
       this.total = res.data.total;
       this.result_list = res.data.data;

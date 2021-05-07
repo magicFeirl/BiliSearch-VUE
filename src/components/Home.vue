@@ -99,7 +99,6 @@ export default {
             keyword: this.search_form.keyword,
             pn: this.search_form.pn,
             ps: this.search_form.ps,
-            ts: Date.now(),
           },
         });
       });
