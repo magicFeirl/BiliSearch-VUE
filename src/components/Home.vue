@@ -16,7 +16,7 @@
           >
             <el-form-item prop="keyword">
               <el-input
-                placeholder="输入关键字；按回车键进行检索。"
+                placeholder="输入关键字，按回车键进行检索。多个关键字用空格隔开。"
                 v-model="search_form.keyword"
                 clearable
                 @keyup.enter.native="search"
@@ -27,28 +27,46 @@
                   placeholder="请选择"
                   style="background-color: white"
                 >
-                  <el-option label="按简介或标题搜索" value="desc_or_title"></el-option>
+                  <el-option
+                    label="按简介或标题搜索"
+                    value="desc_or_title"
+                  ></el-option>
                   <el-option label="按简介搜索" value="desc"></el-option>
                   <el-option label="按标题搜索" value="title"></el-option>
                   <el-option label="按用户名搜索" value="owner"></el-option>
                 </el-select>
-                <!--
-                <el-button
-                  slot="append"
-                  icon="el-icon-search"
-                  @click="search"
-                  style="background-color: white"
-                ></el-button>
-                -->
+
+                <el-popover
+                slot="append"
+                  placement="top-start"
+                  title="提示"
+                  width="200"
+                  trigger="hover"
+                >
+                  <div>
+                    <span>交集: 表示搜索的关键字必须同时存在；</span><br>
+                    <span>并集：只要有关键字符合条件就会被作为结果显示；</span><br><br>
+                    <span>多个关键字用空格隔开。</span>
+                  </div>
+                  <el-switch
+                    slot="reference"
+                    v-model="search_form.join"
+                    active-text="交集"
+                    inactive-text="并集"
+                  ></el-switch>
+                </el-popover>
               </el-input>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="6">
           <el-row>
-            <el-col :span="12"><a href="https://rudk.ml" target="_blank"><i class="el-icon-star-off
-"></i>饼图站</a></el-col>
-            
+            <el-col :span="12"
+              ><a href="https://rudk.ml" target="_blank"
+                ><i class="el-icon-star-off"></i>饼图站</a
+              ></el-col
+            >
+
             <el-col :span="12"><a href="#">UDK IS GOD</a></el-col>
             <!--
             <el-col :span="8"> 关于 </el-col>
@@ -77,6 +95,7 @@ export default {
         keyword: "",
         pn: 1,
         ps: 20,
+        join: false,
       },
       search_form_rules: {
         keyword: {
@@ -101,6 +120,7 @@ export default {
             keyword: this.search_form.keyword,
             pn: this.search_form.pn,
             ps: this.search_form.ps,
+            join: this.search_form.join ? "and" : "or",
           },
         });
       });

@@ -12,7 +12,7 @@ import 'nprogress/nprogress.css'
 Vue.config.productionTip = false
 
 
-axios.defaults.baseURL = 'https://uzuki.ml/search-api/';
+axios.defaults.baseURL = 'https://uzuki.ml/search-api/'; // 'http://localhost:4545' 
 
 // 添加请求拦截器，在发请求之前会调用这个回调添加 Auth 请求头字段
 // 在发送请求前加载进度条

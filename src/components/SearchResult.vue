@@ -46,7 +46,10 @@
       <div style="margin-top: 25vh; text-align: center;" v-else>
         <div><i class="el-icon-paperclip"></i>我们没有找到你想要的结果 :(，你可以试试:</div>
         <br>
+        <div><a :href="`https://search.bilibili.com/video?keyword=${query_param.keyword}`" target="_blank">B站站内搜索: {{query_param.keyword}}</a></div>
+        <br>
         <div><a :href="`https://www.baidu.com/s?ie=UTF-8&wd=${query_param.keyword}`" target="_blank">用百度搜索: {{query_param.keyword}}</a></div>
+        <br>
         <div><a :href="`https://www.google.com.hk/search?q=${query_param.keyword}`" target="_blank">用Google搜索: {{query_param.keyword}}</a></div>
       </div>
     </div>
@@ -57,7 +60,7 @@
         </div>
         <div v-else>
           <i class="el-icon-warning-outline"></i
-          >连接后端服务器超时，请检查你的网络设置，或点击<strong
+          >连接后端服务器出错，请检查你的网络设置，或点击<strong
             ><a
               style="color: grey"
               href="https://message.bilibili.com/#/whisper/mid194602704"
