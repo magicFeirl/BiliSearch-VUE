@@ -27,6 +27,7 @@
                   placeholder="请选择"
                   style="background-color: white"
                 >
+                  <el-option label="按简介或标题搜索" value="desc_or_title"></el-option>
                   <el-option label="按简介搜索" value="desc"></el-option>
                   <el-option label="按标题搜索" value="title"></el-option>
                   <el-option label="按用户名搜索" value="owner"></el-option>
@@ -45,10 +46,11 @@
         </el-col>
         <el-col :span="6">
           <el-row>
-            <el-col :span="24"><a href="https://rudk.ml" target="_blank"><i class="el-icon-star-off
+            <el-col :span="12"><a href="https://rudk.ml" target="_blank"><i class="el-icon-star-off
 "></i>饼图站</a></el-col>
+            
+            <el-col :span="12"><a href="#">UDK IS GOD</a></el-col>
             <!--
-            <el-col :span="8"> 使用方法 </el-col>
             <el-col :span="8"> 关于 </el-col>
             -->
           </el-row>
@@ -71,7 +73,7 @@ export default {
   data() {
     return {
       search_form: {
-        type: "desc",
+        type: "desc_or_title",
         keyword: "",
         pn: 1,
         ps: 20,

@@ -8,6 +8,7 @@
       <p>FAQ:</p>
       <p>那些视频能被搜索到?</p>
       <p>答: 大部分B站内的银饼相关的视频（心虚）。</p>
+      <p>更多信息见这篇<a href="https://www.bilibili.com/read/cv11202788" target="_blank">专栏</a></p>
     </div>
   </div>
 </template>
