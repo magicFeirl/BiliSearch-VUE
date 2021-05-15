@@ -20,7 +20,6 @@ export default {
       script.id = 'cnzz';
       document.body.appendChild(script);
     }
-  },
   }
 }
 </script>
