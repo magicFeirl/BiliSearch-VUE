@@ -167,7 +167,7 @@ a {
 .pagination_wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 35px;
 }
 
 .wrapper {

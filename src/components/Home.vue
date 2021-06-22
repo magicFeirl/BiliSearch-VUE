@@ -38,7 +38,7 @@ export default {
 
 #main {
   height: 100%;
-  padding: 80px;
+  padding: 80px 30px;
   padding-bottom: 30px;
   box-sizing: border-box;
   overflow: scroll;
