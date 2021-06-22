@@ -2,9 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Home from '../components/Home.vue'
-import SearchResult from '../components/SearchResult.vue'
-import DefaultPage from '../components/DefaultPage.vue'
-
+const SearchResult = () => import('../views/SearchResult.vue')
+const DefaultPage = () => import('../views/DefaultPage.vue')
 
 Vue.use(VueRouter)
 
@@ -17,8 +16,12 @@ const routes = [{
       props: route => ({ query_param: route.query }),
     },
     {
-      path: '',
+      path: '/about',
       component: DefaultPage
+    },
+    {
+      path: '',
+      component: SearchResult
     }
   ]
 }]

@@ -21,7 +21,7 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  margin-top: 100px;
+  margin-top: -80px;
   display: flex;
   justify-content: center;
   align-items: center;

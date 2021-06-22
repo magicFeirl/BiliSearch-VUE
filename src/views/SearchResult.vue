@@ -2,42 +2,22 @@
   <div>
     <div v-if="loaded">
       <div v-if="total !== 0">
-        <div
-          style="
-            margin-bottom: 10px;
-            font-weight: bolder;
-            color: #aaa;
-            font-size: 14px;
-          "
-        >
+        <div class="result-title">
           搜索结果
         </div>
-        <el-row :gutter="12">
-          <el-col :span="6" v-for="item in result_list" :key="item.id">
-            <el-card
-              shadow="hover"
-              :body-style="{ padding: '1px 20px', height: '100%' }"
-            >
-              <a
-                :href="`https://www.bilibili.com/video/av${item.aid}`"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <p class="title">{{ item.title }}</p>
-                <p class="desc">{{ item.desc }}</p>
-              </a>
-            </el-card>
-          </el-col>
-        </el-row>
+        
+        <!-- 结果列表卡片 
+        思路是父组件分页，把请求的数据放到子组件中
+        -->
+        <item-container :data="result_list"></item-container>
 
         <div class="pagination_wrapper">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="parseInt(query_param.pn)"
-            :page-sizes="[4, 8, 20, 40]"
             :page-size="parseInt(query_param.ps)"
-            layout="total, sizes, prev, pager, next, jumper"
+            layout="total, prev, pager, next, jumper"
             :total="total"
           >
           </el-pagination>
@@ -75,8 +55,13 @@
 </template>
 
 <script>
+import ItemContainer from '../components/ItemContainer.vue';
+
 export default {
   name: "SearchResult",
+  components:{
+    ItemContainer
+  },
   created(){
     this.getResultList();
   },
@@ -94,6 +79,13 @@ export default {
   props: {
     query_param: {
       type: Object,
+      default: () => {
+        return {
+          keyword: 'udkisgod',
+          type: 'all',
+          ps: 20
+        }
+      }
     },
   },
   methods: {
@@ -133,6 +125,13 @@ export default {
 .title {
   margin: 5px 0;
   font-weight: bolder;
+}
+
+.result-title {
+  margin: 0 0 10px -10px;
+  font-weight: bolder;
+  color: #aaa;
+  font-size: 14px;
 }
 
 .desc {

@@ -4,6 +4,7 @@ import router from './router'
 import axios from 'axios'
 import './plugins/element.js'
 import './assets/css/global.css'
+import './assets/css/icons.css'
 
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -11,9 +12,10 @@ import 'nprogress/nprogress.css'
 
 Vue.config.productionTip = false
 
-
-axios.defaults.baseURL = 'https://uzuki.ml/search-api/'; // 'http://localhost:4545' 
-
+// https://uzuki.ml/search-api/
+// 'http://localhost:4545' 
+axios.defaults.baseURL = 'https://uzuki.ml/search-api/'; 
+axios.defaults.timeout= 1000 * 10;
 // 添加请求拦截器，在发请求之前会调用这个回调添加 Auth 请求头字段
 // 在发送请求前加载进度条
 axios.interceptors.request.use(config => {
