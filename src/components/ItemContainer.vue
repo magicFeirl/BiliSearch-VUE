@@ -20,7 +20,7 @@
         <div class="duration-wrap">{{ videoDuration(item.duration) }}</div>
       </div>
       <div class="info-warp">
-        <p class="title">{{ item.title }}</p>
+        <p class="title" :title="item.title">{{ item.title }}</p>
         <div class="video-info">
           <div class="poster">
             <a
