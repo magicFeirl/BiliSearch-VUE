@@ -29,12 +29,27 @@
               >{{ "@" + item.owner_name }}</a
             >
           </div>
+          <div class="detail">
+            <el-popover
+              placement="bottom"
+              title="简介"
+              width="50"
+              trigger="hover"
+            >
+              <div>
+                <p>
+                  {{ item.desc }}
+                </p>
+              </div>
+              <el-button v-if="item.desc" type="text" slot="reference">详情</el-button>
+            </el-popover>
+          </div>
           <!-- <div class="stats">
-                        <div><i class="iconfont icon-zan"></i><span>{{ item.like }}</span></div>
-                        <div><i class="iconfont icon-bofangshu"></i><span>{{ item.view }}</span></div>
-                        <div><i class="iconfont icon-danmushu"></i><span>{{ item.danmaku }}</span></div>
-                        <div><i class="iconfont icon-fenxiang"></i><span>{{ item.share }}</span></div>
-                    </div> -->
+            <div><i class="iconfont icon-zan"></i><span>{{ item.like }}</span></div>
+            <div><i class="iconfont icon-bofangshu"></i><span>{{ item.view }}</span></div>
+            <div><i class="iconfont icon-danmushu"></i><span>{{ item.danmaku }}</span></div>
+            <div><i class="iconfont icon-fenxiang"></i><span>{{ item.share }}</span></div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -169,6 +184,21 @@ export default {
   align-items: center;
   color: rgb(66, 66, 66);
   font-size: 14px;
+  position: relative;
+}
+
+.detail {
+  position: absolute;
+  right: 5px;
+
+  .el-button {
+    color: #999;
+
+    &:hover {
+      text-decoration: underline;
+      font-weight: 700;
+    }
+  }
 }
 
 .stats {
