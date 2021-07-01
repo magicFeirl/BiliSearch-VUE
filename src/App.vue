@@ -9,7 +9,6 @@ export default {
   name: 'App',
   mounted(){
     this.initCNZZ();
-	this.initBaiduStati();
   },
   methods: {
     initCNZZ() {
@@ -20,15 +19,6 @@ export default {
       script.id = 'cnzz';
       document.body.appendChild(script);
     },
-	initBaiduStati() {
-		var _hmt = _hmt || [];
-		(function() {
-		  var hm = document.createElement("script");
-		  hm.src = "https://hm.baidu.com/hm.js?2a3c4097459f6873fc3177c646f78921";
-		  var s = document.getElementsByTagName("script")[0]; 
-		  s.parentNode.insertBefore(hm, s);
-		})();
-	}
   }
 }
 </script>
