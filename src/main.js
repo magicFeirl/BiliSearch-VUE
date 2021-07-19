@@ -21,6 +21,9 @@ axios.defaults.timeout= 1000 * 10;
 axios.interceptors.request.use(config => {
   NProgress.start();
   return config; // 固定写法
+}, (config) => {
+	NProgress.done();
+	return Promise.reject('请求出错');
 });
 
 axios.interceptors.response.use(config => {
