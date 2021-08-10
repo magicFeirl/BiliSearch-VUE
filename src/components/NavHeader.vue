@@ -61,7 +61,7 @@
       </el-col>
       <el-col :span="6">
         <el-row>
-          <el-col :span="16"
+          <el-col :span="8"
             ><a href="https://rudk.ml" target="_blank"
               ><i class="el-icon-star-off"></i>饼图站</a
             ></el-col
@@ -73,9 +73,9 @@
               关于
             </router-link></el-col
           >
-          <!--
-            <el-col :span="8"> 关于 </el-col>
-            -->
+          
+            <el-col :span="8"><a href='http://121.5.133.245:3630'>不能访问？</a></el-col>
+           
         </el-row>
       </el-col>
     </el-row>
