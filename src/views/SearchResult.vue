@@ -43,7 +43,7 @@
           >连接后端服务器出错，请检查你的网络设置，或点击<strong
             ><a
               style="color: grey"
-              href="https://message.bilibili.com/#/whisper/mid194602704"
+              href="https://message.bilibili.com/#/whisper/mid343118157"
               target="_blank"
               >这↑里↓</a
             ></strong
