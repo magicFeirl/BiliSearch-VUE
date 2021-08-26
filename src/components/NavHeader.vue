@@ -33,6 +33,8 @@
                 <el-option label="按简介搜索" value="desc"></el-option>
                 <el-option label="按标题搜索" value="title"></el-option>
                 <el-option label="按用户名搜索" value="owner"></el-option>
+                <el-option label="按av号搜索（不带av前缀）" value="aid"></el-option>
+                <el-option label="按bv号搜索" value="bvid"></el-option>
               </el-select>
 
               <el-popover
