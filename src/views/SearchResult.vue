@@ -5,8 +5,8 @@
         <div class="result-title">
           搜索结果
         </div>
-        
-        <!-- 结果列表卡片 
+
+        <!-- 结果列表卡片
         思路是父组件分页，把请求的数据放到子组件中
         -->
         <item-container :data="result_list"></item-container>
@@ -94,12 +94,14 @@ export default {
       this.getResultList();
     },
     handleCurrentChange(newPage) {
+      // 切换页面后滑动到顶部
+      document.querySelector('#main').scrollTo(0, 0);
       this.query_param.pn = newPage;
       this.getResultList();
     },
     async getResultList() {
       // console.log('Result')
-      // return 
+      // return
       const res = await this.$http
         .get("search", {
           params: this.query_param,
@@ -112,7 +114,7 @@ export default {
         this.no_error = false;
         return;
       }
-  
+
       this.loaded = true;
       this.total = res.data.total;
       this.result_list = res.data.data;
