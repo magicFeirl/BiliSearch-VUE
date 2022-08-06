@@ -9,12 +9,12 @@ import './assets/css/icons.css'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
+import 'virtual:windi.css'
 
 Vue.config.productionTip = false
 
-// https://uzuki.ml/search-api/
-// 'http://localhost:4545' 
-axios.defaults.baseURL = 'https://udkisangel.ml/search-api/'; 
+
+axios.defaults.baseURL = '/search-api/'; 
 axios.defaults.timeout= 1000 * 10;
 // 添加请求拦截器，在发请求之前会调用这个回调添加 Auth 请求头字段
 // 在发送请求前加载进度条

@@ -1,62 +1,77 @@
 <template>
-  <div class="card-container">
-    <div
-      @click="jumpToBili(item.aid)"
-      class="card"
-      v-for="(item, idx) in data"
-      :key="idx"
-    >
-      <div class="img-warp">
+  <div class="grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center">
+    <div class="card" v-for="(item, idx) in data" :key="idx">
+      <div class="img-warp" @click="jumpToBili(item.aid)">
         <div v-if="item.copyright === 1" class="copyright-wrap">原创</div>
         <!-- 方案1: 使用代理 -->
         <!-- <img :src="`https://images.weserv.nl/?url=${item.cover}&w=260&h=160`" title=""/> -->
         <!-- 方案2: 禁用 refer -->
-        <el-image
-          fit="cover"
-          lazy
-          :src="`${item.cover}@260w_160h.webp`"
-          alt=""
-        ></el-image>
+        <el-image fit="cover" lazy :src="`${item.cover}@260w_160h.webp`" alt=""></el-image>
         <div class="duration-wrap">{{ videoDuration(item.duration) }}</div>
       </div>
       <div class="info-warp">
-        <p class="title" :title="item.title">{{ item.title }}</p>
+        <p @click="jumpToBili(item.aid)" class="title" :title="item.title">{{ item.title }}</p>
         <div class="video-info">
           <div class="poster">
-            <a
-              target="_blank"
-              :href="`https://space.bilibili.com/${item.owner_id}`"
-              >{{ "@" + item.owner_name }}</a
-            >
+            <a target="_blank" :href="`https://space.bilibili.com/${item.owner_id}`">{{ "@" + item.owner_name }}</a>
           </div>
           <div class="detail">
-            <el-popover
-              placement="bottom"
-              title="简介"
-              width="50"
-              trigger="hover"
-            >
-              <div>
-                <p>
-                  {{ item.desc }}
-                </p>
-              </div>
-              <el-button v-if="item.desc" type="text" slot="reference">详情</el-button>
-            </el-popover>
+            <el-button @click="showVideoDetail(item)" type="text">详情</el-button>
           </div>
-          <!-- <div class="stats">
-            <div><i class="iconfont icon-zan"></i><span>{{ item.like }}</span></div>
-            <div><i class="iconfont icon-bofangshu"></i><span>{{ item.view }}</span></div>
-            <div><i class="iconfont icon-danmushu"></i><span>{{ item.danmaku }}</span></div>
-            <div><i class="iconfont icon-fenxiang"></i><span>{{ item.share }}</span></div>
-          </div> -->
         </div>
       </div>
     </div>
+
+    <el-dialog :visible.sync="isShowVideoDetail" width="50%">
+      <template #title>
+        <span class="font-bold">{{ detail.title }}</span> 的详细信息
+      </template>
+      <div class="flex flex-col detail-dialog-body gap-2">
+        <div class="stats mb-2">
+          <p class="dialog-title">播放数据</p>
+          <i class="iconfont icon-zan !ml-0"></i><span>{{ detail.like }}</span>
+          <i class="iconfont icon-bofangshu ml-2"></i><span>{{ detail.view }}</span>
+          <i class="iconfont icon-danmushu ml-2"></i><span>{{ detail.danmaku }}</span>
+          <i class="iconfont icon-fenxiang ml-2"></i><span>{{ detail.share }}</span>
+        </div>
+
+        <div>
+          <p class="dialog-title">简介</p>
+          <p class="whitespace-pre-wrap">{{ detail.desc }}</p>
+
+        </div>
+
+        <div>
+          <p class="dialog-title">投稿时间</p>
+          <p>{{ new Date(detail.pubdate * 1000).toLocaleString() }}</p>
+        </div>
+
+        <div>
+          <p class="dialog-title mb-2">标签</p>
+          <p class="flex flex-wrap gap-2">
+            <span v-for="tag in detail.tags" class="tag">{{ tag }}</span>
+          </p>
+        </div>
+
+        <div>
+          <p class="dialog-title mt-4">其他操作</p>
+          <p>
+            <a :href="detail.cover" target="_blank">下载封面</a>
+          </p>
+        </div>
+
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 export default {
+  data() {
+    return {
+      isShowVideoDetail: false,
+      detail: {}
+    }
+  },
   props: {
     data: {
       type: Array,
@@ -64,6 +79,10 @@ export default {
     },
   },
   methods: {
+    showVideoDetail(detail) {
+      this.detail = detail
+      this.isShowVideoDetail = true
+    },
     jumpToBili(aid) {
       window.open(`https://www.bilibili.com/video/av${aid}`);
     },
@@ -94,33 +113,27 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.card-container {
-  height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  flex: 1 1 auto;
-  padding: 20px;
-  justify-content: flex-start;
+.el-diaolg .el-dialog__body {
+  padding: 0 !important;
+}
+
+.tag {
+  @apply py-1 px-2 rounded-2xl bg-gray-300/70 text-gray-600 text-sm cursor-pointer;
+}
+
+.dialog-title {
+  @apply font-bold text-sm mb-2 text-gray-500;
 }
 
 .card {
-  width: 285px;
-  height: 235px;
-  box-sizing: border-box;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: 0.5s;
-  margin: 0 15px 30px 15px;
-}
+  @apply border border-light-800;
+  @apply w-285px rounded-sm overflow-hidden;
 
-.card:hover {
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
 
 .img-warp {
-  position: relative;
+  @apply relative cursor-pointer;
+
 }
 
 .copyright-wrap {
@@ -153,29 +166,16 @@ export default {
   min-width: 35px;
 }
 
-.img-warp > .el-image {
-  height: 160px;
-  width: 100%;
+.img-warp>.el-image {
+  @apply h-160px w-full;
 }
 
 .info-warp {
-  padding: 0 8px;
+  @apply p-2 pt-0 box-border;
 }
 
 .title {
-  font-size: 16px;
-  font-weight: 700;
-  color: inherit;
-  white-space: nowrap;
-  overflow: hidden;
-  justify-self: stretch;
-  text-overflow: ellipsis;
-  margin: 10px 0;
-}
-
-.iconfont {
-  font-size: 12pt;
-  margin: 0 4px 0 12px;
+  @apply line-clamp-1 font-bold my-2 cursor-pointer;
 }
 
 .video-info {
@@ -196,14 +196,7 @@ export default {
 
     &:hover {
       text-decoration: underline;
-      font-weight: 700;
     }
   }
-}
-
-.stats {
-  width: 140px;
-  display: flex;
-  justify-content: space-around;
 }
 </style>

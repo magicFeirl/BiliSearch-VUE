@@ -1,28 +1,29 @@
 <template>
   <div id="app">
+
+    <!-- 导航栏 -->
+    <nav-header id="header"></nav-header>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import NavHeader from './components/NavHeader.vue'
+
+
 export default {
   name: 'App',
-  mounted(){
-    this.initCNZZ();
+  components: {
+    NavHeader
+  },
+  mounted() {
+
   },
   methods: {
-    initCNZZ() {
-      //添加脚本
-      const script = document.createElement('script');
-      script.src = 'https://s9.cnzz.com/z_stat.php?id=1279913187&web_id=1279913187';
-      script.language = 'JavaScript';
-      script.id = 'cnzz';
-      document.body.appendChild(script);
-    },
+
   }
 }
 </script>
 
 <style scoped lang="less">
-
 </style>

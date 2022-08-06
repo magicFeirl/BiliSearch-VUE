@@ -28,12 +28,10 @@ const routes = [{
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
   routes
 })
 
 router.beforeEach((to, from, next) => {
-
   if (window._hmt) {
     if (to.path) {
       window._hmt.push(['_trackPageview', to.fullPath])

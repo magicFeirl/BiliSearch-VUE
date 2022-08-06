@@ -1,25 +1,17 @@
 <template>
-  <div class="container">
-    <!-- 导航栏 -->
-    <nav-header id="header"></nav-header>
-
-    <!-- 搜索结果显示区域 -->
-    <div id="main">
-      <transition name="el-fade-in">
-        <router-view> </router-view>
-      </transition>
-    </div>
+  <!-- 搜索结果显示区域 -->
+  <div id="main" class="pt-65px pb-16 px-4 overflow-auto">
+    <transition name="el-fade-in">
+      <router-view> </router-view>
+    </transition>
   </div>
+
 </template>
 
 <script>
-import NavHeader from './NavHeader.vue'
 
 export default {
   name: "Home",
-  components: {
-    NavHeader
-  },
 };
 </script>
 
@@ -37,10 +29,6 @@ export default {
 }
 
 #main {
-  height: 100%;
-  padding: 80px 30px;
-  padding-bottom: 30px;
-  box-sizing: border-box;
   overflow: scroll;
 }
 </style>

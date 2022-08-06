@@ -19,16 +19,15 @@ body,
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden;
 }
 
 a {
-    color: #999;
-    text-decoration: none;
+    text-decoration: underline !important;
+    @apply !text-gray-600/80;
 }
 
 a:hover {
-    color: #666;
+    @apply !text-gray-400;
 }
 
 .el-main {
