@@ -12,25 +12,23 @@
         <item-container :data="result_list"></item-container>
 
         <div class="pagination_wrapper">
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="parseInt(query_param.pn)"
-            :page-size="parseInt(query_param.ps)"
-            layout="total, prev, pager, next, jumper"
-            :total="total"
-          >
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            :current-page="parseInt(query_param.pn)" :page-size="parseInt(query_param.ps)"
+            layout="total, prev, pager, next, jumper" :total="total">
           </el-pagination>
         </div>
       </div>
       <div style="margin-top: 25vh; text-align: center;" v-else>
         <div><i class="el-icon-paperclip"></i>我们没有找到你想要的结果 :(，你可以试试:</div>
         <br>
-        <div><a :href="`https://search.bilibili.com/video?keyword=${query_param.keyword}`" target="_blank">B站站内搜索: {{query_param.keyword}}</a></div>
+        <div><a :href="`https://search.bilibili.com/video?keyword=${query_param.keyword}`" target="_blank">B站站内搜索:
+            {{ query_param.keyword }}</a></div>
         <br>
-        <div><a :href="`https://www.baidu.com/s?ie=UTF-8&wd=${query_param.keyword}`" target="_blank">用百度搜索: {{query_param.keyword}}</a></div>
+        <div><a :href="`https://www.baidu.com/s?ie=UTF-8&wd=${query_param.keyword}`" target="_blank">用百度搜索:
+            {{ query_param.keyword }}</a></div>
         <br>
-        <div><a :href="`https://www.google.com.hk/search?q=${query_param.keyword}`" target="_blank">用Google搜索: {{query_param.keyword}}</a></div>
+        <div><a :href="`https://www.google.com.hk/search?q=${query_param.keyword}`" target="_blank">用Google搜索:
+            {{ query_param.keyword }}</a></div>
       </div>
     </div>
     <div style="margin-top: 35vh; text-align: center;" v-else>
@@ -39,15 +37,8 @@
           <i class="el-icon-loading"></i>正在搜索中，请耐心等候...
         </div>
         <div v-else>
-          <i class="el-icon-warning-outline"></i
-          >连接后端服务器出错，请检查你的网络设置，或点击<strong
-            ><a
-              style="color: grey"
-              href="https://message.bilibili.com/#/whisper/mid343118157"
-              target="_blank"
-              >这↑里↓</a
-            ></strong
-          >通知站长后端炸了。
+          <i class="el-icon-warning-outline"></i>连接后端服务器出错，请检查你的网络设置，或点击<strong><a style="color: grey"
+              href="https://message.bilibili.com/#/whisper/mid343118157" target="_blank">这↑里↓</a></strong>通知站长后端炸了。
         </div>
       </div>
     </div>
@@ -59,14 +50,11 @@ import ItemContainer from '../components/ItemContainer.vue';
 
 export default {
   name: "SearchResult",
-  components:{
+  components: {
     ItemContainer
   },
-  created(){
+  created() {
     this.getResultList();
-  },
-  watch: {
-    '$route': 'getResultList'
   },
   data() {
     return {
@@ -76,13 +64,14 @@ export default {
       no_error: true,
     };
   },
+  watch: {
+    '$route': 'getResultList'
+  },
   props: {
     query_param: {
       type: Object,
       default: () => {
         return {
-          keyword: 'udkisgod',
-          type: 'all',
           ps: 20
         }
       }
@@ -90,14 +79,18 @@ export default {
   },
   methods: {
     handleSizeChange(newSize) {
-      this.query_param.ps = newSize;
-      this.getResultList();
+    
+      // this.getResultList();
     },
     handleCurrentChange(newPage) {
-      // 切换页面后滑动到顶部
-      document.querySelector('#main').scrollTo(0, 0);
-      this.query_param.pn = newPage;
-      this.getResultList();
+      this.$router.replace({
+        path: 'search',
+        query: {
+          ...this.query_param,
+          pn: newPage
+        }
+      })
+      // this.getResultList();
     },
     async getResultList() {
       // console.log('Result')

@@ -13,7 +13,7 @@
             <el-input placeholder="输入关键字，按回车键进行检索。多个关键字用空格隔开。" v-model="search_form.keyword" clearable
               @keyup.enter.native="search">
               <el-select slot="prepend" v-model="search_form.type" placeholder="请选择" style="background-color: white">
-                <el-option v-for="option in searchOptions" v-bind="option"></el-option>
+                <el-option :key="option.label" v-for="option in searchOptions" v-bind="option"></el-option>
               </el-select>
 
               <el-popover slot="append" placement="top-start" title="提示" width="200" trigger="hover">
@@ -61,6 +61,11 @@ export default {
       ]
     }
   },
+  mounted() {
+    for (const key in this.$route.query) {
+      this.search_form[key] = this.$route.query[key]
+    }
+  },
   data() {
     return {
       search_form: {
@@ -91,7 +96,7 @@ export default {
           query: {
             type: this.search_form.type,
             keyword: this.search_form.keyword,
-            pn: this.search_form.pn,
+            pn: 1,
             ps: this.search_form.ps,
             join: this.search_form.join ? "and" : "or",
           },

@@ -14,14 +14,14 @@ import 'virtual:windi.css'
 Vue.config.productionTip = false
 
 
-axios.defaults.baseURL = '/search-api/'; 
+axios.defaults.baseURL = '/api'; 
 axios.defaults.timeout= 1000 * 10;
 // 添加请求拦截器，在发请求之前会调用这个回调添加 Auth 请求头字段
 // 在发送请求前加载进度条
 axios.interceptors.request.use(config => {
   NProgress.start();
   return config; // 固定写法
-}, (config) => {
+}, () => {
 	NProgress.done();
 	return Promise.reject('请求出错');
 });
