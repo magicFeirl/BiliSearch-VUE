@@ -86,8 +86,8 @@ export default {
     };
   },
   watch: {
-    '$router': function() {
-      alert('change')
+    '$route': function() {
+      this.search_form.keyword = this.$route.query.keyword
     }
   },
   methods: {
