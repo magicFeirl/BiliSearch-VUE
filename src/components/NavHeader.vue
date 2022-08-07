@@ -30,7 +30,7 @@
       </el-col>
       <el-col :span="6">
         <el-row>
-          <el-col :span="8"><a href="https://rudk.ml" target="_blank"><i class="el-icon-star-off"></i>饼图站</a></el-col>
+          <el-col :span="8"></el-col>
 
           <el-col :span="8">
             <router-link to="/about">
@@ -116,7 +116,7 @@ export default {
 <style lang="less">
 .el-header {
   border-bottom: 1px solid #ccc;
-  z-index: 1001;
+  z-index: 1101;
 
   .el-row {
     height: 100%;

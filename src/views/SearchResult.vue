@@ -2,8 +2,11 @@
   <div>
     <div v-if="loaded">
       <div v-if="total !== 0">
-        <div class="result-title">
-          搜索结果
+        <div class="pt-4 pb-8 px-4 font-bold text-sm text-gray-400 flex w-full justify-between">
+          <span>搜索结果({{ total }})</span>
+          <!-- <div>过滤总分小于:
+            <el-input-number size="small" :controls="false" />数据
+          </div> -->
         </div>
 
         <!-- 结果列表卡片
@@ -33,7 +36,7 @@
     </div>
     <div style="margin-top: 35vh; text-align: center;" v-else>
       <div>
-        <div v-if="no_error">
+        <div v-if="no_error" class="text-gray-400">
           <i class="el-icon-loading"></i>正在搜索中，请耐心等候...
         </div>
         <div v-else>
@@ -65,7 +68,7 @@ export default {
     };
   },
   watch: {
-    '$route': 'getResultList'
+    '$route':'getResultList'
   },
   props: {
     query_param: {
@@ -128,58 +131,9 @@ export default {
 </script>
 
 <style scoped lang="less">
-.title {
-  margin: 5px 0;
-  font-weight: bolder;
-}
-
-.result-title {
-  margin: 0 0 10px -10px;
-  font-weight: bolder;
-  color: #aaa;
-  font-size: 14px;
-}
-
-.desc {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow: scroll;
-  white-space: pre-line;
-  word-wrap: break-word;
-  word-break: break-all;
-  height: 100px;
-  margin: 0;
-}
-
-a {
-  color: black;
-}
-
-.el-card {
-  height: 160px;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.el-row {
-  padding: 0 15px;
-}
-
-.el-col {
-  margin-top: 10px;
-}
-
 .pagination_wrapper {
   display: flex;
   justify-content: center;
   margin-top: 35px;
-}
-
-.wrapper {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  justify-items: center;
 }
 </style>

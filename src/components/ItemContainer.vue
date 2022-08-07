@@ -2,15 +2,28 @@
   <div class="grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center">
     <div class="card" v-for="(item, idx) in data" :key="idx">
       <div class="img-warp h-160px" @click="jumpToBili(item.aid)">
+        <!-- copyright -->
         <div class="absolute flex top-10px pl-10px">
           <div v-if="item.copyright" class="mr-2 copyright-wrap">原创</div>
-          <div v-if="item.attr !=0 && item.attr != -412" class="copyright-wrap !bg-red-400">{{ getVideoAttrText(item.attr)}}</div>
+          <div v-if="item.attr != 0 && item.attr != -412" class="copyright-wrap !bg-red-400">{{
+            getVideoAttrText(item.attr)
+            }}</div>
         </div>
 
+        <!-- description cover -->
+        <div class="description-cover overflow-hidden p-1">
+          <p class="p-2 whitespace-pre-line line-clamp-5 h-full">{{ item.description }}</p>
+        </div>
         <!-- 方案1: 使用代理 -->
         <!-- <img :src="`https://images.weserv.nl/?url=${item.cover}&w=260&h=160`" title=""/> -->
         <!-- 方案2: 禁用 refer -->
-        <el-image fit="cover" lazy :src="`${item.cover}@260w_160h.webp`" alt=""></el-image>
+        <el-image fit="cover" lazy :src="`${item.cover}@260w_160h.webp`" alt="">
+          <template #placeholder>
+            <div class="w-full h-full flex items-center justify-center text-gray-400">
+              <span class="-ml-2 mr-2">loading...</span><i class="el-icon-picture"></i>
+            </div>
+          </template>
+        </el-image>
         <div class="duration-wrap bottom-0">{{ videoDuration(item.duration) }}</div>
       </div>
       <div class="info-warp">
@@ -117,7 +130,7 @@ export default {
     //   this.closeDialog()
     // },
     getVideoAttrText(attr) {
-      if(attr === 62002) {
+      if (attr === 62002) {
         return '失效: 自删'
       }
 
@@ -185,8 +198,16 @@ export default {
 
 .img-warp {
   @apply relative cursor-pointer;
-
 }
+
+.description-cover {
+  @apply text-light-400 text-sm;
+  @apply opacity-0 transition transition-opacity w-full h-full absolute left-0 top-0 bg-gray-900/50 z-1050;
+}
+.img-warp:hover .description-cover {
+  @apply opacity-100;
+}
+
 
 .copyright-wrap {
   @apply px-6px py-1 rounded-md opacity-80 bg-orange-400 text-white text-sm font-bold z-1000;
