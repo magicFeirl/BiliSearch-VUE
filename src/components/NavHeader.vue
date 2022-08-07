@@ -55,6 +55,7 @@ export default {
         { label: "按简介或标题搜索", value: "desc_or_title" },
         { label: "按简介搜索", value: "desc" },
         { label: "按标题搜索", value: "title" },
+        { label: "按标签搜索", value: "tags" },
         { label: "按用户名搜索", value: "owner" },
         { label: "按av号搜索（不带av前缀）", value: "aid" },
         { label: "按bv号搜索", value: "bvid" }
@@ -83,6 +84,11 @@ export default {
         },
       },
     };
+  },
+  watch: {
+    '$router': function() {
+      alert('change')
+    }
   },
   methods: {
     search() {

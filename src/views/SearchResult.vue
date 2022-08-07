@@ -9,7 +9,7 @@
         <!-- 结果列表卡片
         思路是父组件分页，把请求的数据放到子组件中
         -->
-        <item-container :data="result_list"></item-container>
+        <item-container @searchTag="searchTag" :data="result_list"></item-container>
 
         <div class="pagination_wrapper">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -19,15 +19,15 @@
         </div>
       </div>
       <div style="margin-top: 25vh; text-align: center;" v-else>
-        <div><i class="el-icon-paperclip"></i>我们没有找到你想要的结果 :(，你可以试试:</div>
+        <div class="text-gray-600"><i class="el-icon-paperclip"></i>我们没有找到你想要的结果 :(，你可以试试:</div>
         <br>
         <div><a :href="`https://search.bilibili.com/video?keyword=${query_param.keyword}`" target="_blank">B站站内搜索:
             {{ query_param.keyword }}</a></div>
         <br>
-        <div><a :href="`https://www.baidu.com/s?ie=UTF-8&wd=${query_param.keyword}`" target="_blank">用百度搜索:
+        <div><a :href="`https://www.baidu.com/s?ie=UTF-8&wd=${query_param.keyword}`" target="_blank">百度搜索:
             {{ query_param.keyword }}</a></div>
         <br>
-        <div><a :href="`https://www.google.com.hk/search?q=${query_param.keyword}`" target="_blank">用Google搜索:
+        <div><a :href="`https://www.google.com.hk/search?q=${query_param.keyword}`" target="_blank">Google搜索:
             {{ query_param.keyword }}</a></div>
       </div>
     </div>
@@ -78,19 +78,30 @@ export default {
     },
   },
   methods: {
-    handleSizeChange(newSize) {
-    
-      // this.getResultList();
+    isEmtpyObject(obj) {
+      return Object.keys(obj).length === 0
     },
-    handleCurrentChange(newPage) {
+    search(queries = {}) {
+      if(this.isEmtpyObject(queries)) {
+        return 
+      }
+
       this.$router.replace({
         path: 'search',
         query: {
           ...this.query_param,
-          pn: newPage
+          ...queries
         }
       })
-      // this.getResultList();
+    },
+    searchTag(tag) {
+      this.search({ pn: 1, type: 'tags', keyword: tag})
+    },
+    handleSizeChange(newSize) {
+      this.search({ ps: newSize })
+    },
+    handleCurrentChange(newPage) {
+      this.search({ pn: newPage })
     },
     async getResultList() {
       // console.log('Result')
