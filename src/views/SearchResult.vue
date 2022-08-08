@@ -12,7 +12,9 @@
         <!-- 结果列表卡片
         思路是父组件分页，把请求的数据放到子组件中
         -->
-        <item-container @search="doSearch" :data="result_list"></item-container>
+        <VideoCardList @search="doSearch">
+          <VideoCardListItem @showVideoDetail="showVideoDetail" v-for="(item, idx) in data" :key="idx" :item="item" />
+        </VideoCardList>
 
         <div class="pagination_wrapper">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -45,42 +47,52 @@
         </div>
       </div>
     </div>
+
+    <VideoDetailDialog :detail="videoDetail" @close="closeDialog" @search="doSearch" :visible="dialogVisible" />
   </div>
 </template>
-
-<script>
-import ItemContainer from '../components/ItemContainer.vue';
+  
+  <script>
+import VideoCardList from '../components/VideoCardList.vue';
+import VideoCardListItem from '../components/VideoCardListItem.vue';
+import VideoDetailDialog from '../components/VideoDetailDialog.vue';
 
 export default {
   name: "SearchResult",
   components: {
-    ItemContainer
+    VideoCardList, VideoCardListItem, VideoDetailDialog
   },
   created() {
     this.getResultList();
   },
   data() {
     return {
-      result_list: [],
+      data: [],
       total: 0,
       loaded: false,
       no_error: true,
+      dialogVisible: false,
+      videoDetail: {}
     };
   },
-  watch: {
-    '$route': 'getResultList'
-  },
-  props: {
+  watch: { '$route': 'getResultList' }, props: {
     query_param: {
-      type: Object,
-      default: () => {
-        return {
-          ps: 20
+      type: Object, default:
+        () => {
+          return {
+            ps: 20
+          }
         }
-      }
     },
   },
   methods: {
+    showVideoDetail(video) {
+      this.dialogVisible = true
+      this.videoDetail = video
+    },
+    closeDialog() {
+      this.dialogVisible = false
+    },
     isEmtpyObject(obj) {
       return Object.keys(obj).length === 0
     },
@@ -89,6 +101,7 @@ export default {
         return
       }
 
+      console.log(this.query_param, queries)
       this.$router.replace({
         path: 'search',
         query: {
@@ -97,9 +110,9 @@ export default {
         }
       })
     },
-    doSearch({ value, type }) {
+    doSearch({ type, keyword }) {
       // 潜在bug：搜索同一个关键字时会报重复导航的错误
-      this.search({ pn: 1, type, keyword: value })
+      this.search({ pn: 1, type, keyword })
     },
     handleSizeChange(newSize) {
       this.search({ ps: newSize })
@@ -123,16 +136,16 @@ export default {
 
       this.loaded = true;
       this.total = res.data.total;
-      this.result_list = res.data.data;
+      this.data = res.data.data;
     },
   },
 };
 </script>
 
-<style scoped lang="less">
-.pagination_wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 35px;
-}
-</style>
+      <style scoped lang="less">
+      .pagination_wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 35px;
+      }
+      </style>

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '../components/Home.vue'
+import Home from '../views/Home.vue'
+
 const SearchResult = () => import('../views/SearchResult.vue')
 const DefaultPage = () => import('../views/DefaultPage.vue')
 
