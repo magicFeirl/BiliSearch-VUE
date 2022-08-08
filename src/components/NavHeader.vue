@@ -116,7 +116,7 @@ export default {
 <style lang="less">
 .el-header {
   border-bottom: 1px solid #ccc;
-  z-index: 1101;
+  z-index: 1001;
 
   .el-row {
     height: 100%;

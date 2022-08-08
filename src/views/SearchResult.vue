@@ -12,7 +12,7 @@
         <!-- 结果列表卡片
         思路是父组件分页，把请求的数据放到子组件中
         -->
-        <item-container @searchTag="searchTag" :data="result_list"></item-container>
+        <item-container @search="doSearch" :data="result_list"></item-container>
 
         <div class="pagination_wrapper">
           <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
@@ -68,7 +68,7 @@ export default {
     };
   },
   watch: {
-    '$route':'getResultList'
+    '$route': 'getResultList'
   },
   props: {
     query_param: {
@@ -85,8 +85,8 @@ export default {
       return Object.keys(obj).length === 0
     },
     search(queries = {}) {
-      if(this.isEmtpyObject(queries)) {
-        return 
+      if (this.isEmtpyObject(queries)) {
+        return
       }
 
       this.$router.replace({
@@ -97,8 +97,9 @@ export default {
         }
       })
     },
-    searchTag(tag) {
-      this.search({ pn: 1, type: 'tags', keyword: tag})
+    doSearch({ value, type }) {
+      // 潜在bug：搜索同一个关键字时会报重复导航的错误
+      this.search({ pn: 1, type, keyword: value })
     },
     handleSizeChange(newSize) {
       this.search({ ps: newSize })
@@ -107,8 +108,6 @@ export default {
       this.search({ pn: newPage })
     },
     async getResultList() {
-      // console.log('Result')
-      // return
       const res = await this.$http
         .get("search", {
           params: this.query_param,

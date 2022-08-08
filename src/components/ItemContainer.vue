@@ -1,18 +1,20 @@
 <template>
   <div class="grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center">
     <div class="card" v-for="(item, idx) in data" :key="idx">
-      <div class="img-warp h-160px" @click="jumpToBili(item.aid)">
+      <div class="img-warp h-160px bg-light-500" @click="jumpToBili(item.aid)">
         <!-- copyright -->
         <div class="absolute flex top-10px pl-10px">
           <div v-if="item.copyright" class="mr-2 copyright-wrap">原创</div>
           <div v-if="item.attr != 0 && item.attr != -412" class="copyright-wrap !bg-red-400">{{
-            getVideoAttrText(item.attr)
-            }}</div>
+          getVideoAttrText(item.attr)
+          }}</div>
         </div>
 
         <!-- description cover -->
         <div class="description-cover overflow-hidden p-1">
-          <p class="p-2 whitespace-pre-line line-clamp-5 h-full">{{ item.description }}</p>
+          <p class="p-2 whitespace-pre-line line-clamp-5 h-full">
+            {{ getPubdate(item.pubdate) + '\n\n' + item.description }}
+          </p>
         </div>
         <!-- 方案1: 使用代理 -->
         <!-- <img :src="`https://images.weserv.nl/?url=${item.cover}&w=260&h=160`" title=""/> -->
@@ -44,7 +46,7 @@
         <span class="font-bold">{{ detail.title }}</span> 的详细信息
       </template>
       <div class="flex flex-col detail-dialog-body gap-2">
-        <p v-html="descWithLink('av' + detail.aid)" class="-mt-8 mb-2"></p>
+        <p class="-mt-8 mb-2"><a target="_blank" :href="videoLink(detail.aid)">av{{ detail.aid }}</a></p>
         <div class="stats mb-2">
           <p class="dialog-title">播放数据</p>
           <i class="iconfont icon-bofangshu !ml-0"></i><span>{{ detail.view }}</span>
@@ -55,19 +57,20 @@
 
         <div v-if="detail.description">
           <p class="dialog-title">简介</p>
-          <p class="whitespace-pre-wrap" v-html="descWithLink(detail.description)"></p>
-
+          <!-- <p v-html="descWithLink(detail.description)"></p> -->
+          <TextWithLink :text="detail.description" class="whitespace-pre-wrap"
+            :onSearchText="(text) => search(text, 'desc_or_title')" />
         </div>
 
         <div>
           <p class="dialog-title">投稿时间</p>
-          <p>{{ new Date(detail.pubdate * 1000).toLocaleString() }}</p>
+          <p>{{ getPubdate(detail.pubdate) }}</p>
         </div>
 
         <div v-if="detail.tags">
           <p class="dialog-title mb-2">标签</p>
           <p class="flex flex-wrap gap-2">
-            <span @click="searchTag(tag)" v-for="tag in detail.tags.split(' ')" class="tag">{{ tag }}</span>
+            <span @click="search(tag, 'tags')" v-for="tag in detail.tags.split(' ')" class="tag">{{ tag }}</span>
           </p>
         </div>
 
@@ -87,6 +90,8 @@
   </div>
 </template>
 <script>
+import TextWithLink from './TextWithLink.vue';
+
 export default {
   data() {
     return {
@@ -100,35 +105,22 @@ export default {
       default: () => [],
     },
   },
+  components: {
+    TextWithLink
+  },
   methods: {
+    getPubdate(pubdate) {
+      return new Date(pubdate * 1000).toLocaleString()
+    },
     closeDialog() {
       this.isShowVideoDetail = false
     },
-    searchTag(tag) {
+    search(value, type) {
       this.closeDialog()
-      this.$emit('searchTag', tag)
+      this.$emit('search', {
+        value, type
+      })
     },
-    descWithLink(desc) {
-      if (!desc) {
-        return
-      }
-
-      const patterns = {
-        'https://www.nicovideo.jp/watch/$1': /(sm\d+)/g,
-        'https://www.bilibili.com/video/$1': /(BV\w+|av\d+)/g
-      }
-
-      for (const url in patterns) {
-        const re = patterns[url]
-        const element = `<a target="_blank" href=${url}>$1</a>`
-        desc = desc.replace(re, element)
-      }
-
-      return desc
-    },
-    // searchKeyword() {
-    //   this.closeDialog()
-    // },
     getVideoAttrText(attr) {
       if (attr === 62002) {
         return '失效: 自删'
@@ -202,8 +194,9 @@ export default {
 
 .description-cover {
   @apply text-light-400 text-sm;
-  @apply opacity-0 transition transition-opacity w-full h-full absolute left-0 top-0 bg-gray-900/50 z-1050;
+  @apply opacity-0 transition transition-opacity w-full h-full absolute left-0 top-0 bg-gray-900/50 z-1000;
 }
+
 .img-warp:hover .description-cover {
   @apply opacity-100;
 }
