@@ -29,7 +29,7 @@ export default {
     return {
       data: [],
       total: 0,
-      ps: 0,
+      ps: 20,
       pn: 1
     };
   },
