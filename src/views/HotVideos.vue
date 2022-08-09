@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="order mt-4">
+    <div class="order">
       <span class="font-bold -ml-4 mr-2">筛选:</span>
       <span @click="switchOrder(type, 'order')" v-for="{ name, type } in orderings" class="operation"
         :class="currentOrder === type ? 'selected' : ''">
@@ -11,7 +11,7 @@
         :class="currentCopyright === type ? 'selected' : ''">
         {{ name }}
       </span>
-      <el-popover placement="top-start" title="标题" width="200" trigger="hover" content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+      <el-popover placement="top-start" title="说明" width="200" trigger="hover" content="热门内容按视频综合分数排序，最多显示 32 条数据。*综合分数计算方式同饼月刊站计分方式。">
         <i slot="reference" class="iconfont icon-question"></i>
       </el-popover>
     </div>
@@ -66,9 +66,9 @@ export default {
     orderings() {
       return [
         { name: '昨日', type: 'yesterday' },
-        { name: '本周', type: 'week' },
+        { name: '七天内', type: 'week' },
         { name: '两周内', type: '2week' },
-        { name: '本月', type: 'month' },
+        { name: '三十天内', type: 'month' },
       ]
     }
   }
@@ -77,7 +77,7 @@ export default {
 
 <style scoped>
 .order {
-  @apply text-sm text-gray-400 flex gap-2 justify-center mb-4;
+  @apply text-sm text-gray-400 flex gap-2 justify-center mb-6 mt-4;
 }
 
 .order span.operation {

@@ -35,7 +35,7 @@
         <el-col :span="6">
           <el-row>
             <!-- <el-col :span="8" /> -->
-            <el-col :span="12">
+            <el-col :span="18">
               <!-- 设置相关暂时不写 -->
               <!-- <span @click="openSettingDrawer">设置</span> -->
               <router-link to="/hot">
@@ -43,7 +43,7 @@
               </router-link>
             </el-col>
 
-            <el-col :span="12">
+            <el-col :span="6">
               <router-link to="/about">
                 <i class="iconfont icon-question">关于</i>
               </router-link>
