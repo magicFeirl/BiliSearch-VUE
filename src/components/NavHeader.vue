@@ -34,20 +34,22 @@
         </el-col>
         <el-col :span="6">
           <el-row>
-            <el-col :span="8">
+            <!-- <el-col :span="8" /> -->
+            <el-col :span="12">
               <!-- 设置相关暂时不写 -->
               <!-- <span @click="openSettingDrawer">设置</span> -->
-            </el-col>
-
-            <el-col :span="8">
-              <router-link to="/about">
-                <i class="el-icon-warning-outline"></i>
-                关于
+              <router-link to="/hot">
+                <i class="iconfont icon-fire">热门视频</i>
               </router-link>
             </el-col>
 
-            <el-col :span="8"><a href='http://121.5.133.245:3630'>不能访问？</a></el-col>
-
+            <el-col :span="12">
+              <router-link to="/about">
+                <i class="iconfont icon-question">关于</i>
+              </router-link>
+            </el-col>
+            <!-- 
+            <el-col :span="8"><a href='http://121.5.133.245:3630'>不能访问？</a></el-col> -->
           </el-row>
         </el-col>
       </el-row>

@@ -22,7 +22,7 @@
 
       <div>
         <p class="dialog-title">投稿时间</p>
-        <p>{{ getPubdate(detail.pubdate) }}</p>
+        <p>{{ detail.pubdate }}</p>
       </div>
 
       <div v-if="detail.tags">
@@ -50,12 +50,11 @@
 <script>
 import TextWithLink from './TextWithLink.vue';
 
-import { getPubdate, videoLink } from '../utils/video'
+import { videoLink } from '../utils/video'
 
 export default {
   methods: {
     videoLink,
-    getPubdate,
     close() {
       this.$emit('close')
     },

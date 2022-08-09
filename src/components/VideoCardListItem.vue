@@ -12,7 +12,7 @@
       <!-- description cover -->
       <div class="description-cover overflow-hidden p-1">
         <p class="p-2 whitespace-pre-line line-clamp-4 h-full">
-          {{ getPubdate(item.pubdate) + '\n\n' + item.description }}
+          {{ item.pubdate + '\n\n' + item.description }}
         </p>
       </div>
       <!-- 方案1: 使用代理 -->
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { getVideoAttrText, jumpToBili, getPubdate, videoDuration, videoLink } from '../utils/video'
+import { getVideoAttrText, jumpToBili, videoDuration, videoLink } from '../utils/video'
 
 export default {
   props: {
@@ -58,7 +58,6 @@ export default {
     },
     getVideoAttrText,
     jumpToBili,
-    getPubdate,
     videoDuration,
     videoLink
   }

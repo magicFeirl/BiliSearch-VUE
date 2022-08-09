@@ -10,9 +10,6 @@ export function videoLink(aid) {
     return `https://www.bilibili.com/video/av${aid}`
 }
 
-export function getPubdate(pubdate) {
-    return new Date(pubdate * 1000).toLocaleString()
-}
 export function jumpToBili(aid) {
     window.open(this.videoLink(aid));
 }

@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 
 const SearchResult = () => import('../views/SearchResult.vue')
 const DefaultPage = () => import('../views/DefaultPage.vue')
+const HotVideos = () => import('../views/HotVideos.vue')
 
 Vue.use(VueRouter)
 
@@ -17,12 +18,16 @@ const routes = [{
       props: route => ({ query_param: route.query }),
     },
     {
-      path: '/about',
+      path: 'about',
       component: DefaultPage
     },
     {
       path: '',
       component: SearchResult
+    },
+    {
+      path: 'hot',
+      component: HotVideos
     }
   ]
 }]

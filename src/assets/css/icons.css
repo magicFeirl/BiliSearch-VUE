@@ -1,8 +1,9 @@
 @font-face {
   font-family: "iconfont";
-  src: url('//at.alicdn.com/t/font_2623860_ivjxk9rl86p.woff2?t=1624268803377') format('woff2'),
-       url('//at.alicdn.com/t/font_2623860_ivjxk9rl86p.woff?t=1624268803377') format('woff'),
-       url('//at.alicdn.com/t/font_2623860_ivjxk9rl86p.ttf?t=1624268803377') format('truetype');
+  /* Project id 3437873 */
+  src: url('//at.alicdn.com/t/c/font_3437873_s038tv6vm0s.woff2?t=1660025223191') format('woff2'),
+    url('//at.alicdn.com/t/c/font_3437873_s038tv6vm0s.woff?t=1660025223191') format('woff'),
+    url('//at.alicdn.com/t/c/font_3437873_s038tv6vm0s.ttf?t=1660025223191') format('truetype');
 }
 
 .iconfont {
@@ -13,6 +14,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-fenxiang:before {
+  content: "\e668";
+}
+
+.icon-fire:before {
+  content: "\e842";
+}
+
+.icon-question:before {
+  content: "\e691";
+}
+
 .icon-danmushu:before {
   content: "\e665";
 }
@@ -21,8 +34,12 @@
   content: "\e666";
 }
 
-.icon-fenxiang:before {
+.icon-Bbi:before {
   content: "\e667";
+}
+
+.icon-shoucang:before {
+  content: "\e669";
 }
 
 .icon-zan:before {

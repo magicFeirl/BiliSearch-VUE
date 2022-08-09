@@ -4,12 +4,11 @@
   </div>
 </template>
 <script>
-import { getPubdate, videoLink } from '../utils/video'
+import { videoLink } from '../utils/video'
 
 export default {
   methods: {
     videoLink,
-    getPubdate,
   },
 };
 </script>

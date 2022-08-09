@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full justify-center flex-col items-center mt-20">
+  <div class="flex w-full justify-center flex-col items-center mt-20 text-gray-600">
     <h4>
       欢迎来到CTRN43062的淫饼视频搜索站，请在上方输入你想要的搜索的数据。
     </h4>
