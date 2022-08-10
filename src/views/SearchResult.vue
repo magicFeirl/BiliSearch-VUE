@@ -7,7 +7,7 @@
       <template #pagination>
         <div class="flex mt-35px justify-center">
           <el-pagination :hide-on-single-page="true" @size-change="handleSizeChange"
-            @current-change="handleCurrentChange" :current-page="pn" :page-size="ps"
+            @current-change="handleCurrentChange" :current-page="parseInt(params.pn)" :page-size="parseInt(params.ps) || ps"
             layout="total, prev, pager, next, jumper" :total="total">
           </el-pagination>
         </div>
@@ -29,8 +29,7 @@ export default {
     return {
       data: [],
       total: 0,
-      ps: 20,
-      pn: 1
+      ps: 20
     };
   },
   watch: {
@@ -44,7 +43,8 @@ export default {
       type: Object,
       default: () => {
         return {
-          ps: 20
+          ps: 20,
+          pn: 1,
         }
       }
     },
@@ -68,10 +68,10 @@ export default {
       }
     },
     handleSizeChange(newSize) {
-      this.$router.replace({ path: 'search', query: { ...this.params, ps: newSize } })
+      this.$router.replace({ path: 'search', query: { ...this.$route.query, ps: newSize } })
     },
     handleCurrentChange(newPage) {
-      this.$router.replace({ path: 'search', query: { ...this.params, pn: newPage } })
+      this.$router.replace({ path: 'search', query: { ...this.$route.query, pn: newPage } })
     },
   }
 };

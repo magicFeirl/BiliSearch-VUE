@@ -1,7 +1,7 @@
 <template>
   <div>
     <VideoCardList @search="search">
-      <VideoCardListItem @showVideoDetail="showVideoDetail" v-for="(item, idx) in data" :key="idx" :item="item" />
+      <VideoCardListItem @searchUser="search" @showVideoDetail="showVideoDetail" v-for="(item, idx) in data" :key="idx" :item="item" />
     </VideoCardList>
 
     <slot name="pagination"></slot>

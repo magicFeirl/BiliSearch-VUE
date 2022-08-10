@@ -1,7 +1,5 @@
 <template>
   <div>
-
-
     <el-header class="fixed left-0 right-0 top-0 bg-white">
       <el-row :gutter="6">
         <el-col :span="6">
@@ -15,11 +13,12 @@
             <el-form-item prop="keyword">
               <el-input placeholder="输入关键字，按回车键进行检索。多个关键字用空格隔开。" v-model="search_form.keyword" clearable
                 @keyup.enter.native="search">
+
                 <el-select slot="prepend" v-model="search_form.type" placeholder="请选择" style="background-color: white">
                   <el-option :key="option.label" v-for="option in searchOptions" v-bind="option"></el-option>
                 </el-select>
 
-                <el-popover slot="append" placement="top-start" title="提示" width="200" trigger="hover">
+                <el-popover class="<sm:hidden" slot="append" placement="top-start" title="提示" width="200" trigger="hover">
                   <div>
                     <span>交集: 表示搜索的关键字必须同时存在；</span><br />
                     <span>并集：只要有关键字符合条件就会被作为结果显示；</span><br /><br />

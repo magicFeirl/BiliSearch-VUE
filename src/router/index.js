@@ -15,7 +15,7 @@ const routes = [{
   children: [{
       path: 'search',
       component: SearchResult,
-      props: route => ({ query_param: route.query }),
+      props: route => ({ params: route.query }),
     },
     {
       path: 'about',
@@ -43,7 +43,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (window._hmt) {
     if (to.path) {
-      window._hmt.push(['_trackPageview', '/#' + to.fullPath])
+      window._hmt.push(['_trackPageview', '/' + to.fullPath])
     }
   }
 

@@ -5,8 +5,8 @@
       <div class="absolute flex top-10px pl-10px">
         <div v-if="item.copyright" class="mr-2 copyright-wrap">原创</div>
         <div v-if="item.attr != 0 && item.attr != -412" class="copyright-wrap !bg-red-400">{{
-          getVideoAttrText(item.attr)
-          }}</div>
+            getVideoAttrText(item.attr)
+        }}</div>
       </div>
 
       <!-- description cover -->
@@ -32,7 +32,9 @@
       <div class="video-info">
         <div class="poster">
           <a target="_blank" :href="`https://space.bilibili.com/${item.owner_id}`">{{ "@" + item.owner_name
-            }}</a>
+          }}</a>
+          <i @click="searchUser(item.owner_name)"
+            class="el-icon-search cursor-pointer hover:text-gray-400 text-sm hidden"></i>
         </div>
         <div class="detail">
           <el-button @click="showVideoDetail(item)" type="text">详情</el-button>
@@ -55,6 +57,9 @@ export default {
   methods: {
     showVideoDetail(video) {
       this.$emit('showVideoDetail', video)
+    },
+    searchUser(keyword) {
+      this.$emit('searchUser', { keyword, type: 'owner' })
     },
     getVideoAttrText,
     jumpToBili,
@@ -122,6 +127,10 @@ export default {
   color: rgb(66, 66, 66);
   font-size: 14px;
   position: relative;
+}
+
+.poster:hover i {
+  @apply  !inline;
 }
 
 .detail {
