@@ -43,7 +43,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (window._hmt) {
     if (to.path) {
-      window._hmt.push(['_trackPageview', '/' + to.fullPath])
+      window._hmt.push(['_trackPageview', decodeURIComponent(to.fullPath)])
     }
   }
 
