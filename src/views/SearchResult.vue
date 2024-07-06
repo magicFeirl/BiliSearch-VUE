@@ -2,6 +2,21 @@
   <div>
     <div class="pt-4 pb-8 px-4 font-bold text-sm text-gray-400 flex w-full justify-between">
       <span>搜索结果({{ total }})</span>
+      <span class="ml-auto">
+        <span>{{ unrelatedCount }} 条疑似无关数据被屏蔽 <el-switch v-model="hideUnrelatedData"></el-switch></span>
+
+        <el-popover effect="light" trigger="click" width="20rem">
+          <div>
+            <p class="mb-4px">搜索站根据视频标签收录数据，但是由于某些标签被滥用所以可能会显示实际和例区无关的数据。开启该功能可以一定程度屏蔽这些数据。</p>
+            <h3 class="font-bold mb-4px">具体规则</h3>
+            <p class="mb-4px">{{ unrelatedDataRule }}</p>
+            <p>指定关键字搜索时，该功能默认关闭。</p>
+          </div>
+          <template #reference>
+            <i class="iconfont icon-question"></i>
+          </template>
+        </el-popover>
+      </span>
     </div>
     <VideoListPage v-if="data.length" :data="data">
       <template #pagination>
@@ -20,7 +35,7 @@
     </div>
   </div>
 </template>
-  
+
 <script>
 import VideoListPage from '../components/VideoListPage.vue';
 import NotFound from '../components/NotFound.vue';
@@ -35,10 +50,15 @@ export default {
   },
   data() {
     return {
-      data: [],
+      rawData: [],
       total: 0,
       ps: 20,
-      loading: true
+      unrelatedCount: 0,
+      loading: true,
+      hideUnrelatedData: true,
+      needly_tags: ['真夏の夜の淫梦', 'COOKIE☆', 'Cookie☆', 'クッキー☆音madリンク', 'クッキー☆', '淫夢本編リンク', '创价', '银梦实况', '真夏夜的淫梦', '东方夏银梦', '淫夢音MADリンク', '哲♂学', '东方馅挂炒饭', '创价学会', '创价'],
+      check_tags: ['例のアレ'],
+      blacklist_tags: ['原神', '炫神', '吉吉国王']
     };
   },
   watch: {
@@ -50,6 +70,33 @@ export default {
   computed: {
     keyword() {
       return this.$route.query.keyword
+    },
+    unrelatedDataRule() {
+      return `含有任意一个 ${this.check_tags.join(', ')} 标签，但不含有任意一个 ${this.needly_tags.join(', ')} 标签的视频，会被程序判断为无关视频并隐藏。`
+    },
+    data() {
+      if (!this.hideUnrelatedData) {
+        return this.rawData
+      }
+
+
+      return this.rawData.filter((item) => {
+        const tags = item.tags.split(' ')
+        const check_tag_valid = this.check_tags.some(tag => tags.includes(tag))
+        const needly_valid = this.needly_tags.some(tag => tags.includes(tag))
+        const in_blacklist = this.blacklist_tags.some(tag => tags.includes(tag))
+
+        if (in_blacklist) {
+          return false
+        }
+
+        if (check_tag_valid && !needly_valid) {
+          this.unrelatedCount++
+          return false
+        }
+
+        return true
+      })
     }
   },
   props: {
@@ -64,8 +111,14 @@ export default {
     },
   },
   methods: {
+
     async getResultList() {
       this.loading = true
+
+      // 有关键字搜索时，关闭无关筛选
+      if (this.keyword) {
+        this.hideUnrelatedData = false
+      }
 
       try {
         const { total, data } = await getVideoList({
@@ -73,8 +126,9 @@ export default {
           ...this.$route.query
         })
 
+        this.unrelatedCount = 0
         this.total = total;
-        this.data = data;
+        this.rawData = data;
       } catch (e) {
         console.log(e)
         this.$message.error("获取数据失败，请稍后再试。");
