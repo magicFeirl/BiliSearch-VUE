@@ -9,9 +9,9 @@ export default {
     server: {
         proxy: {
             '/api': {
-                target: 'http://119.8.51.13:3630/api',
+                target: 'http://101.132.142.130',
                 // target: 'http://127.0.0.1:4545',
-                rewrite: (path) => path.replace(/^\/api/, '')
+                // rewrite: (path) => path.replace(/^\/api/, '')
             }
         }
     }
