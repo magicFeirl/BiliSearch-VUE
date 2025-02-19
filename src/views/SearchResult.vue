@@ -157,7 +157,7 @@ export default {
           ...this.$route.query,
         });
 
-        this.unrelatedCount = 0;
+        // this.unrelatedCount = 0;
         this.total = total;
         this.rawData = data;
       } catch (e) {
