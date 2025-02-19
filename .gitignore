@@ -3,6 +3,7 @@ cookie-search
 node_modules
 /dist
 
+pnpm-lock.yaml
 # 
 # local env files
 .env.local

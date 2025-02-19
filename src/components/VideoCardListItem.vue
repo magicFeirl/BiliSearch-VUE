@@ -5,7 +5,7 @@
       <div class="absolute flex top-10px pl-10px">
         <div v-if="item.copyright" class="mr-2 copyright-wrap">原创</div>
         <div v-if="item.attr != 0 && item.attr != -412" class="copyright-wrap !bg-red-400">{{
-            getVideoAttrText(item.attr)
+          getVideoAttrText(item.attr)
         }}</div>
       </div>
 
@@ -28,7 +28,12 @@
       <div class="duration-wrap bottom-0">{{ videoDuration(item.duration) }}</div>
     </div>
     <div class="info-warp">
-      <p @click="jumpToBili(item.aid)" class="title" :title="item.title">{{ item.title }}</p>
+      <p class="title" @click="jumpToBili(item.aid)">
+        <HighLightText :title="item.title" :highlights="[keyword]">{{
+          item.title
+        }}</HighLightText>
+      </p>
+
       <div class="video-info">
         <div class="poster">
           <a target="_blank" :href="`https://space.bilibili.com/${item.owner_id}`">{{ "@" + item.owner_name
@@ -46,13 +51,18 @@
 
 <script>
 import { getVideoAttrText, jumpToBili, videoDuration, videoLink } from '../utils/video'
+import HighLightText from './HighLightText.vue';
 
 export default {
   props: {
     item: {
       type: Object,
       default: () => { }
-    }
+    },
+    keyword: {
+      type: String,
+      default: ""
+    },
   },
   methods: {
     showVideoDetail(video) {
@@ -65,6 +75,9 @@ export default {
     jumpToBili,
     videoDuration,
     videoLink
+  },
+  components: {
+    HighLightText
   }
 }
 </script>
@@ -130,7 +143,7 @@ export default {
 }
 
 .poster:hover i {
-  @apply  !inline;
+  @apply !inline;
 }
 
 .detail {

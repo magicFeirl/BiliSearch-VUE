@@ -1,7 +1,12 @@
 <template>
   <el-dialog :visible.sync="dialogVisible" width="50%">
     <template #title>
-      <span class="font-bold">{{ detail.title }}</span> 的详细信息
+
+      <span class="font-bold">
+        <HighLightText :highlights="[keyword]">
+          {{ detail.title }}
+        </HighLightText>
+      </span> 的详细信息
     </template>
     <div class="flex flex-col detail-dialog-body gap-2">
       <p class="-mt-8 mb-2"><a target="_blank" :href="videoLink(detail.aid)">av{{ detail.aid }}</a></p>
@@ -15,9 +20,11 @@
 
       <div v-if="detail.description">
         <p class="dialog-title">简介</p>
+        <VideoDescription @onSearchText="(text) => search(text, 'desc_or_title')" :description="detail.description"
+          :keyword="keyword"></VideoDescription>
         <!-- <p v-html="descWithLink(detail.description)"></p> -->
-        <TextWithLink :text="detail.description" class="whitespace-pre-wrap"
-          :onSearchText="(text) => search(text, 'desc_or_title')" />
+        <!-- <TextWithLink :keyword="keyword" :text="detail.description" class="whitespace-pre-wrap"
+          :onSearchText="(text) => search(text, 'desc_or_title')" /> -->
       </div>
 
       <div>
@@ -48,9 +55,10 @@
 </template>
 
 <script>
-import TextWithLink from './TextWithLink.vue';
+import VideoDescription from './VideoDescription.vue';
 
 import { videoLink } from '../utils/video'
+import HighLightText from './HighLightText.vue';
 
 export default {
   methods: {
@@ -66,7 +74,8 @@ export default {
     }
   },
   components: {
-    TextWithLink,
+    VideoDescription,
+    HighLightText
   },
   computed: {
     dialogVisible: {
@@ -80,6 +89,10 @@ export default {
   },
   props: {
     visible: Boolean,
+    keyword: {
+      type: String,
+      default: ''
+    },
     detail: {
       type: Object,
       default: () => ({})

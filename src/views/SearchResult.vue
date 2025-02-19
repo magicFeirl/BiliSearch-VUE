@@ -1,14 +1,10 @@
 <template>
   <div>
-    <div
-      class="pt-4 pb-8 px-4 font-bold text-sm text-gray-400 flex w-full justify-between"
-    >
+    <div class="pt-4 pb-8 px-4 font-bold text-sm text-gray-400 flex w-full justify-between">
       <span>搜索结果({{ total }})</span>
       <span class="ml-auto">
-        <span
-          >{{ unrelatedCount }} 条疑似无关数据被屏蔽
-          <el-switch v-model="hideUnrelatedData"></el-switch
-        ></span>
+        <span>{{ unrelatedCount }} 条疑似无关数据被屏蔽
+          <el-switch v-model="hideUnrelatedData"></el-switch></span>
 
         <el-popover effect="light" trigger="click" width="20rem">
           <div>
@@ -25,18 +21,13 @@
         </el-popover>
       </span>
     </div>
-    <VideoListPage v-if="data.length" :data="data">
+
+    <VideoListPage v-if="data.length" :data="data" :keyword="keyword">
       <template #pagination>
         <div class="flex mt-35px justify-center">
-          <el-pagination
-            :hide-on-single-page="true"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="parseInt(params.pn)"
-            :page-size="parseInt(params.ps) || ps"
-            layout="total, prev, pager, next, jumper"
-            :total="total"
-          >
+          <el-pagination :hide-on-single-page="true" @size-change="handleSizeChange"
+            @current-change="handleCurrentChange" :current-page="parseInt(params.pn)"
+            :page-size="parseInt(params.ps) || ps" layout="total, prev, pager, next, jumper" :total="total">
           </el-pagination>
         </div>
       </template>

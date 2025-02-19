@@ -1,12 +1,14 @@
 <template>
   <div>
     <VideoCardList @search="search">
-      <VideoCardListItem @searchUser="search" @showVideoDetail="showVideoDetail" v-for="(item, idx) in data" :key="idx" :item="item" />
+      <VideoCardListItem @searchUser="search" @showVideoDetail="showVideoDetail" v-for="(item) in data" :key="item.aid"
+        :item="item" :keyword="keyword" />
     </VideoCardList>
 
     <slot name="pagination"></slot>
 
-    <VideoDetailDialog :detail="videoDetail" @close="closeDialog" @search="search" :visible="dialogVisible" />
+    <VideoDetailDialog :detail="videoDetail" @close="closeDialog" @search="search" :visible="dialogVisible"
+      :keyword="keyword" />
   </div>
 </template>
 
@@ -27,9 +29,10 @@ export default {
       type: Array,
       default: () => []
     },
-    currentPage: Number,
-    pageSize: Number,
-    total: Number
+    keyword: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     return {
