@@ -26,6 +26,7 @@ export default {
       return
     }
 
+    return
     this.$msgbox({
       title: '简讯',
       message:

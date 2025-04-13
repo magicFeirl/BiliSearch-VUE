@@ -18,15 +18,24 @@
                   <el-option :key="option.label" v-for="option in searchOptions" v-bind="option"></el-option>
                 </el-select>
 
-                <el-popover class="<sm:hidden" slot="append" placement="top-start" title="提示" width="200" trigger="hover">
+                <el-popover class="<sm:hidden" slot="append" placement="top-start" title="提示" width="200"
+                  trigger="hover">
                   <div>
                     <span>交集: 表示搜索的关键字必须同时存在；</span><br />
                     <span>并集：只要有关键字符合条件就会被作为结果显示；</span><br /><br />
                     <span>多个关键字用空格隔开。</span>
                   </div>
-                  <el-switch slot="reference" v-model="search_form.join" active-text="交集" inactive-text="并集">
+                  <el-switch :width="30" slot="reference" v-model="search_form.join" active-text="交集"
+                    inactive-text="并集">
                   </el-switch>
                 </el-popover>
+
+                <el-select @change="search" v-model="search_form.copyright_filter" style="margin-left: 20px;"
+                  placeholder="视频类型" slot="append">
+                  <el-option value="" label="全部"></el-option>
+                  <el-option value="original" label="原创"></el-option>
+                  <el-option value="non-original" label="搬运"></el-option>
+                </el-select>
               </el-input>
             </el-form-item>
           </el-form>
@@ -65,9 +74,10 @@
 export default {
   watch: {
     '$route': function () {
-      const { keyword = '', type = 'desc_or_title' } = this.$route.query
+      const { keyword = '', type = 'desc_or_title', copyright_filter } = this.$route.query
       this.search_form.keyword = keyword
       this.search_form.type = type
+      this.search_form.copyright_filter = copyright_filter
     }
   },
   computed: {
@@ -78,7 +88,7 @@ export default {
         { label: "按标题搜索", value: "title" },
         { label: "按标签搜索", value: "tags" },
         { label: "按用户名搜索", value: "owner" },
-        { label: "按av号搜索（不带av前缀）", value: "aid" },
+        { label: "按av号搜索", value: "aid" },
         { label: "按bv号搜索", value: "bvid" }
       ]
     }
@@ -94,6 +104,7 @@ export default {
       direction: 'rtl',
       search_form: {
         type: "desc_or_title",
+        copyright_filter: "",
         keyword: "",
         pn: 1,
         ps: 20,
@@ -101,7 +112,7 @@ export default {
       },
       search_form_rules: {
         keyword: {
-          required: true,
+          required: false,
           message: "  ",
           trigger: "blur",
         },
@@ -118,13 +129,25 @@ export default {
           return;
         }
 
+        let { keyword, type } = this.search_form
+
+        if (type === 'aid') {
+          keyword = keyword.replace('av', '')
+        }
+
+        if (!keyword.trim()) {
+          type = undefined
+          keyword = undefined
+        }
+
         this.$router.replace({
           path: "search",
           query: {
-            type: this.search_form.type,
-            keyword: this.search_form.keyword,
+            type: type,
+            keyword: keyword,
             pn: 1,
             ps: this.search_form.ps,
+            copyright_filter: this.search_form.copyright_filter,
             join: this.search_form.join ? "and" : "or",
           },
         });
