@@ -1,8 +1,15 @@
 <template>
   <div>
     <VideoCardList @search="search">
-      <VideoCardListItem @searchUser="search" @showVideoDetail="showVideoDetail" v-for="(item) in data" :key="item.aid"
-        :item="item" :keyword="keyword" />
+      <template v-for="({ keyword, data, total }) in groupDataByKeyword">
+        <p class="pl-4 mb-6 font-bold text-gray-600 keyword" v-if="keyword && groupDataCount > 1">{{ keyword }} ({{
+          total }})</p>
+        <div class="card-item grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center">
+          <VideoCardListItem @searchUser="search" @showVideoDetail="showVideoDetail" v-for="(item) in data"
+            :key="item.aid" :item="item" :keyword="keyword" />
+        </div>
+        <div class="mb-4"></div>
+      </template>
     </VideoCardList>
 
     <slot name="pagination"></slot>
@@ -13,6 +20,7 @@
 </template>
 
 <script>
+import { groupData } from '../utils/group';
 import VideoCardList from './VideoCardList.vue';
 import VideoCardListItem from './VideoCardListItem.vue';
 import VideoDetailDialog from './VideoDetailDialog.vue';
@@ -34,6 +42,18 @@ export default {
       default: ""
     },
   },
+  computed: {
+    groupDataByKeyword() {
+      if (!this.keyword) {
+        return [{ keyword: '', data: this.data, total: 0 }]
+      }
+
+      return groupData(this.keyword, this.data)
+    },
+    groupDataCount() {
+      return this.groupDataByKeyword.length
+    }
+  },
   data() {
     return {
       videoDetail: {},
@@ -52,9 +72,11 @@ export default {
       // 潜在bug：搜索同一个关键字时会报重复导航的错误
       this.$router.replace({
         path: 'search',
-        query: { pn: 1, type, keyword }
+        query: { ...this.$route.query, pn: 1, type, keyword, }
       })
     },
   },
 };
 </script>
+
+<style scoped></style>

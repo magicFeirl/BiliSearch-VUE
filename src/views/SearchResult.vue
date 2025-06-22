@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div class="pt-4 pb-8 px-4 font-bold text-sm text-gray-400 flex w-full justify-between">
-      <span>搜索结果({{ total }})</span>
+    <div class="pt-4 pb-4 px-4 font-bold text-sm text-gray-400 flex w-full justify-between">
+      <span>搜索结果 <span>
+          <el-link @click="downloadSearchResult" :underline="false" icon="el-icon-download"></el-link>
+        </span>
+      </span>
       <span class="ml-auto">
         <span>{{ unrelatedCount }} 条疑似无关数据被屏蔽
           <el-switch v-model="hideUnrelatedData"></el-switch></span>
@@ -39,6 +42,8 @@
 </template>
 
 <script>
+import { saveAs } from 'file-saver'
+import { groupData } from '../utils/group';
 import VideoListPage from "../components/VideoListPage.vue";
 import NotFound from "../components/NotFound.vue";
 
@@ -134,6 +139,20 @@ export default {
     },
   },
   methods: {
+    downloadSearchResult() {
+      this.$prompt('输入文件名：', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPlaceholder: '搜索结果.json'
+      }).then(({ value }) => {
+        value = value || '搜索结果.json'
+        if (value) {
+          const data = groupData(this.keyword, this.data)
+          const blob = new Blob([JSON.stringify(data, null, 4)], { type: 'application/json' })
+          saveAs(blob, value + '.json')
+        }
+      })
+    },
     async getResultList() {
       this.loading = true;
 

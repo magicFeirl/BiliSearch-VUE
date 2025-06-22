@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center">
+  <div class="flex flex-col">
     <slot></slot>
   </div>
 </template>
