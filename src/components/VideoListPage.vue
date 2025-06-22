@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     groupDataByKeyword() {
-      if (!this.keyword) {
+      if (!this.keyword || !this.isDescType) {
         return [{ keyword: '', data: this.data, total: 0 }]
       }
 
@@ -52,6 +52,9 @@ export default {
     },
     groupDataCount() {
       return this.groupDataByKeyword.length
+    },
+    isDescType() {
+      return this.$route.query.type == 'desc_or_title'
     }
   },
   data() {
