@@ -5,14 +5,17 @@ import HighLightText from './HighLightText.vue'
 export default {
     props: {
         description: String,
-        keyword: String,
+        keyword: {
+            type: String,
+            default: ""
+        },
     },
     emits: ['onSearchText'],
     render(createElement) {
         const textList = this.splitText()
 
         const children = textList.map(text => {
-            const highlightedText = createElement(HighLightText, { props: { highlights: [this.keyword] } }, [text.text])
+            const highlightedText = createElement(HighLightText, { props: { highlights: this.keyword.split(/\s+/) } }, [text.text])
 
             if (text.type == 'link') {
                 return h('a', { attrs: { href: text.url } }, [highlightedText, this.createSearchEl(text.text)])

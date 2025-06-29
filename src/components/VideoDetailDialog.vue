@@ -3,7 +3,7 @@
     <template #title>
 
       <span class="font-bold">
-        <HighLightText :highlights="[keyword]">
+        <HighLightText :highlights="keyword.split(/\s+/)">
           {{ detail.title }}
         </HighLightText>
       </span> 的详细信息

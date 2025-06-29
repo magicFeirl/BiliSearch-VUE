@@ -20,8 +20,6 @@ export default {
             return `${sep}${matched}${sep}`
         }).split(sep).filter(t => t.trim())
 
-        // console.log(textContentList, this.highlightRegExp)
-
         const children = textContentList.map(text => {
             const isHighLightText = this.highlightRegExp.test(text)
 

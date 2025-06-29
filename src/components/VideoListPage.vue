@@ -1,12 +1,12 @@
 <template>
   <div>
     <VideoCardList @search="search">
-      <template v-for="({ keyword, data, total }) in groupDataByKeyword">
+      <template v-for="({ keyword, data, total }, groupNumber) in groupDataByKeyword">
         <p class="pl-4 mb-6 font-bold text-gray-600 keyword" v-if="keyword && groupDataCount > 1">{{ keyword }} ({{
           total }})</p>
         <div class="card-item grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center">
           <VideoCardListItem @searchUser="search" @showVideoDetail="showVideoDetail" v-for="(item) in data"
-            :key="item.aid" :item="item" :keyword="keyword" />
+            :key="item.aid + '-' + groupNumber" :item="item" :keyword="keyword" />
         </div>
         <div class="mb-4"></div>
       </template>

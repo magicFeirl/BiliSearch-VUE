@@ -29,7 +29,7 @@
     </div>
     <div class="info-warp">
       <p class="title" @click="jumpToBili(item.aid)">
-        <HighLightText :title="item.title" :highlights="[keyword]">{{
+        <HighLightText :title="item.title" :highlights="keyword.split(/\s+/)">{{
           item.title
         }}</HighLightText>
       </p>
