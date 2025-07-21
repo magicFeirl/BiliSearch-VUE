@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="pt-4 pb-4 px-4 font-bold text-sm text-gray-400 flex w-full justify-between">
-      <span>搜索结果 <span>
+      <span>搜索结果 ({{ total }})<span>
           <el-link @click="downloadSearchResult" :underline="false" icon="el-icon-download"></el-link>
         </span>
       </span>

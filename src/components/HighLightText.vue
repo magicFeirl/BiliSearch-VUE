@@ -30,7 +30,7 @@ export default {
     },
     computed: {
         highlightRegExp() {
-            return RegExp(this.computedHighlights.join('|'), 'g')
+            return RegExp(this.computedHighlights.join('|'), 'gi')
         },
         computedHighlights() {
             return this.highlights.filter(t => t && t.trim())
