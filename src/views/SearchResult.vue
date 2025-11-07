@@ -25,7 +25,8 @@
       </span>
     </div>
 
-    <VideoListPage v-if="data.length" :data="data" :keyword="keyword">
+    <VideoListPage v-if="data.length || !keyword || (!data.length && blockedData.length)" :data="data"
+      :blocked-data="blockedData" :hide-unrelated="hideUnrelatedData" :keyword="keyword">
       <template #pagination>
         <div class="flex mt-35px justify-center">
           <el-pagination :hide-on-single-page="true" @size-change="handleSizeChange"
@@ -48,6 +49,7 @@ import VideoListPage from "../components/VideoListPage.vue";
 import NotFound from "../components/NotFound.vue";
 
 import getVideoList from "../http/searchVideo";
+import { nextTick } from 'vue';
 
 export default {
   name: "SearchResult",
@@ -69,15 +71,14 @@ export default {
         "クッキー☆音madリンク",
         "クッキー☆",
         "淫夢本編リンク",
-        "创价",
         "银梦实况",
         "真夏夜的淫梦",
         "东方夏银梦",
         "淫夢音MADリンク",
         "哲♂学",
         "东方馅挂炒饭",
-        "创价学会",
-        "创价",
+        // "创价学会",
+        // "创价",
       ],
       check_tags: ["例のアレ"],
       blacklist_tags: ["原神", "炫神", "吉吉国王"],
@@ -104,28 +105,18 @@ export default {
       return this.rawData.length - this.data.length;
     },
     data() {
-      if (!this.hideUnrelatedData) {
-        return this.rawData;
-      }
+      // if (!this.hideUnrelatedData) {
+      //   return this.rawData;
+      // }
 
       // 筛选出非屏蔽数据
       return this.rawData.filter((item) => {
-        const tags = item.tags.split(" ");
-        const check_tag_valid = this.check_tags.some((tag) =>
-          tags.includes(tag)
-        );
-        const needly_valid = this.needly_tags.some((tag) => tags.includes(tag));
-        const in_blacklist = this.blacklist_tags.some((tag) =>
-          tags.includes(tag)
-        );
-
-        if (in_blacklist || (check_tag_valid && !needly_valid)) {
-          return false;
-        }
-
-        return true;
+        return this.isWhiteListedItem(item)
       });
     },
+    blockedData() {
+      return this.rawData.filter(item => !this.isWhiteListedItem(item))
+    }
   },
   props: {
     params: {
@@ -139,6 +130,22 @@ export default {
     },
   },
   methods: {
+    isWhiteListedItem(item) {
+      const tags = item.tags.split(" ");
+      const check_tag_valid = this.check_tags.some((tag) =>
+        tags.includes(tag)
+      );
+      const needly_valid = this.needly_tags.some((tag) => tags.includes(tag));
+      const in_blacklist = this.blacklist_tags.some((tag) =>
+        tags.includes(tag)
+      );
+
+      if (in_blacklist || (check_tag_valid && !needly_valid)) {
+        return false;
+      }
+
+      return true
+    },
     downloadSearchResult() {
       this.$prompt('输入文件名：', '提示', {
         confirmButtonText: '确定',
@@ -156,11 +163,6 @@ export default {
     async getResultList() {
       this.loading = true;
 
-      // 有关键字搜索时，关闭无关筛选
-      if (this.keyword) {
-        this.hideUnrelatedData = false;
-      }
-
       try {
         const { total, data } = await getVideoList({
           ...this.params,
@@ -170,6 +172,16 @@ export default {
         // this.unrelatedCount = 0;
         this.total = total;
         this.rawData = data;
+
+        nextTick(() => {
+          // 有关键字搜索且无被屏蔽数据时，关闭无关筛选
+          if (this.keyword && !this.blockedData.length) {
+            this.hideUnrelatedData = false;
+          } else {
+            this.hideUnrelatedData = true
+          }
+        })
+
       } catch (e) {
         console.log(e);
         this.$message.error("获取数据失败，请稍后再试。");

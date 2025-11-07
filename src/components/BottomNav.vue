@@ -16,11 +16,11 @@ function getMyWebsiteFullURL(port) {
 
 const links = [
     { '@银饼综合推送bot': 'https://space.bilibili.com/343118157' },
-    { '饼图站': getMyWebsiteFullURL() },
-    { '搜索站': getMyWebsiteFullURL('3630') },
-    { '银图站': getMyWebsiteFullURL('3640') },
-    { '饼图仓': getMyWebsiteFullURL('19190') },
-    { 'N站视频下载脚本': 'https://greasyfork.org/zh-CN/scripts/439692-nico-dl' }
+    // { '饼图站': getMyWebsiteFullURL() },
+    // { '搜索站': getMyWebsiteFullURL('3630') },
+    // { '银图站': getMyWebsiteFullURL('3640') },
+    // { '饼图仓': getMyWebsiteFullURL('19190') },
+    // { 'N站视频下载脚本': 'https://greasyfork.org/zh-CN/scripts/439692-nico-dl' }
 ]
 
 export default {

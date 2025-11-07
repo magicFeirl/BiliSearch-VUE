@@ -1,16 +1,21 @@
 <template>
   <div>
     <VideoCardList @search="search">
-      <template v-for="({ keyword, data, total }, groupNumber) in groupDataByKeyword">
+      <template v-for="({ keyword, data, total, type }, groupNumber) in groupDataByKeyword">
         <p class="pl-4 mb-6 font-bold text-gray-600 keyword" v-if="keyword && groupDataCount > 1">{{ keyword }} ({{
           total }})</p>
-        <div class="card-item grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center">
+        <div class="card-item grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center" v-if="type == 'blocked' ? !hideUnrelated : true">
           <VideoCardListItem @searchUser="search" @showVideoDetail="showVideoDetail" v-for="(item) in data"
             :key="item.aid + '-' + groupNumber" :item="item" :keyword="keyword" />
         </div>
         <div class="mb-4"></div>
       </template>
     </VideoCardList>
+
+    <div v-if="!data.length && hideUnrelated">
+      <ElEmpty description="看起来本页数据都被屏蔽了...">
+      </ElEmpty>
+    </div>
 
     <slot name="pagination"></slot>
 
@@ -20,6 +25,7 @@
 </template>
 
 <script>
+import { ElEmpty } from 'element-ui';
 import { groupData } from '../utils/group';
 import VideoCardList from './VideoCardList.vue';
 import VideoCardListItem from './VideoCardListItem.vue';
@@ -37,18 +43,30 @@ export default {
       type: Array,
       default: () => []
     },
+    blockedData: {
+      type: Array,
+      default: () => []
+    },
     keyword: {
       type: String,
       default: ""
     },
+    hideUnrelated: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     groupDataByKeyword() {
+      const blockedDataGroup = { keyword: '被屏蔽的数据', data: this.blockedData, total: this.blockedData.length, type: 'blocked' }
+
       if (!this.keyword || !this.isDescType) {
-        return [{ keyword: '', data: this.data, total: 0 }]
+        return [{ keyword: '', data: this.data, total: 0 }, blockedDataGroup]
       }
 
-      return groupData(this.keyword, this.data)
+      const group = groupData(this.keyword, this.data)
+
+      return group
     },
     groupDataCount() {
       return this.groupDataByKeyword.length
