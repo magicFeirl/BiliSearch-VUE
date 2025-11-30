@@ -165,9 +165,14 @@ export default {
       this.loading = true;
 
       try {
-        const { total, data } = await getVideoList({
-          ...this.params,
+        const query = {
           ...this.$route.query,
+          ...this.params
+        }
+
+        const { total, data } = await getVideoList({
+          ...query,
+          ps: query.ps || this.ps
         });
 
         // this.unrelatedCount = 0;
