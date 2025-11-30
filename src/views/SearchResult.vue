@@ -31,7 +31,8 @@
         <div class="flex mt-35px justify-center">
           <el-pagination :hide-on-single-page="true" @size-change="handleSizeChange"
             @current-change="handleCurrentChange" :current-page="parseInt(params.pn)"
-            :page-size="parseInt(params.ps) || ps" layout="total, prev, pager, next, jumper" :total="total">
+            :page-sizes="[20, 40, 60, 80, 100]" :page-size="parseInt(params.ps) || ps"
+            layout="total, prev, pager, next, jumper, sizes" :total="total">
           </el-pagination>
         </div>
       </template>
@@ -61,7 +62,7 @@ export default {
     return {
       rawData: [],
       total: 0,
-      ps: 20,
+      ps: 100,
       loading: true,
       hideUnrelatedData: true,
       needly_tags: [
@@ -123,7 +124,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          ps: 20,
+          ps: 100,
           pn: 1,
         };
       },
