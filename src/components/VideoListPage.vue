@@ -2,7 +2,7 @@
   <div>
     <VideoCardList @search="search">
       <template v-for="({ keyword, data, total, type }, groupNumber) in groupDataByKeyword">
-        <p class="pl-4 mb-6 font-bold text-gray-600 keyword" v-if="keyword && groupNumber > 1 && total > 0">{{ keyword }} ({{
+        <p class="pl-4 mb-6 font-bold text-gray-600 keyword" v-if="keyword && groupNumber > 0 && total > 0">{{ keyword }} ({{
           total }}) <el-switch v-show="type == 'blocked'" v-model="hideUnrelated"></el-switch></p>
         <div class="card-item grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center"
           v-if="type == 'blocked' ? !hideUnrelated : true">
