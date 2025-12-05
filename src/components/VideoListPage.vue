@@ -2,9 +2,10 @@
   <div>
     <VideoCardList @search="search">
       <template v-for="({ keyword, data, total, type }, groupNumber) in groupDataByKeyword">
-        <p class="pl-4 mb-6 font-bold text-gray-600 keyword" v-if="keyword && groupDataCount > 1">{{ keyword }} ({{
-          total }})</p>
-        <div class="card-item grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center" v-if="type == 'blocked' ? !hideUnrelated : true">
+        <p class="pl-4 mb-6 font-bold text-gray-600 keyword" v-if="keyword && groupNumber > 1 && total > 0">{{ keyword }} ({{
+          total }}) <el-switch v-show="type == 'blocked'" v-model="hideUnrelated"></el-switch></p>
+        <div class="card-item grid grid-cols-[repeat(auto-fill,285px)] gap-8 justify-center"
+          v-if="type == 'blocked' ? !hideUnrelated : true">
           <VideoCardListItem @searchUser="search" @showVideoDetail="showVideoDetail" v-for="(item) in data"
             :key="item.aid + '-' + groupNumber" :item="item" :keyword="keyword" />
         </div>
@@ -13,7 +14,7 @@
     </VideoCardList>
 
     <div v-if="!data.length && hideUnrelated">
-      <ElEmpty description="看起来本页数据都被屏蔽了...">
+      <ElEmpty description="无数据...">
       </ElEmpty>
     </div>
 
@@ -51,10 +52,6 @@ export default {
       type: String,
       default: ""
     },
-    hideUnrelated: {
-      type: Boolean,
-      default: true
-    }
   },
   computed: {
     groupDataByKeyword() {
@@ -78,7 +75,8 @@ export default {
   data() {
     return {
       videoDetail: {},
-      dialogVisible: false
+      dialogVisible: false,
+      hideUnrelated: true
     }
   },
   methods: {

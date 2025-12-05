@@ -5,28 +5,25 @@
           <el-link @click="downloadSearchResult" :underline="false" icon="el-icon-download"></el-link>
         </span>
       </span>
-      <span class="ml-auto">
-        <span>{{ unrelatedCount }} 条疑似无关数据被屏蔽
-          <el-switch v-model="hideUnrelatedData"></el-switch></span>
-
-        <el-popover effect="light" trigger="click" width="20rem">
-          <div>
-            <p class="mb-4px">
-              搜索站根据视频标签收录数据，但是由于某些标签被滥用所以可能会显示实际和例区无关的数据。开启该功能可以一定程度屏蔽这些数据。
-            </p>
-            <h3 class="font-bold mb-4px">具体规则</h3>
-            <p class="mb-4px">{{ unrelatedDataRule }}</p>
-            <p>指定关键字搜索时，该功能默认关闭。</p>
-          </div>
-          <template #reference>
-            <i class="iconfont icon-question"></i>
-          </template>
-        </el-popover>
+      <span class="ml-auto flex items-center">
+        <!-- <span>{{ unrelatedCount }} 条疑似无关数据被屏蔽
+        </span> -->
+        <span>
+          启用屏蔽
+          <el-switch @change="getResultList" v-model="hideUnrelatedData"></el-switch>
+          <span v-show="hideUnrelatedData">
+            后端屏蔽
+            <el-switch @change="getResultList" v-model="hideByBackend"></el-switch>
+          </span>
+        </span>
+        <span @click="blockDataDialogVisible = true" class="mt-2px">
+          <i class="iconfont icon-question"></i>
+        </span>
       </span>
     </div>
 
     <VideoListPage v-if="data.length || !keyword || (!data.length && blockedData.length)" :data="data"
-      :blocked-data="blockedData" :hide-unrelated="hideUnrelatedData" :keyword="keyword">
+      :blocked-data="blockedData" :keyword="keyword">
       <template #pagination>
         <div class="flex mt-35px justify-center">
           <el-pagination :hide-on-single-page="true" @size-change="handleSizeChange"
@@ -40,6 +37,23 @@
     <NotFound v-else-if="!loading" :keyword="keyword" />
     <!-- 只在第一次加载时失效，因为没有清空 data -->
     <div class="text-center mt-8 text-gray-400" v-else>搜索中，请稍后...</div>
+
+
+    <el-dialog title="屏蔽规则" :visible.sync="blockDataDialogVisible" width="40%">
+      <div class="dialog-message">
+        <p>搜索站根据视频标签收录数据，但是由于某些标签被滥用所以可能会显示实际和例区无关的数据。开启该功能可以一定程度屏蔽这些数据。</p>
+        <p><b>具体规则</b></p>
+        <p style="word-break: break-all;">含有任意一个 <VideoTag>例のアレ</VideoTag> 标签，但不含有任意一个 <VideoTag
+            v-for="tag in needly_tags" style="margin-right: 2px; margin-bottom: 2px;">{{ tag }}</VideoTag>
+          标签的视频，会被程序判断为无关视频并隐藏。
+        </p>
+        <!-- <p><b>指定关键字搜索时，该功能默认关闭。</b></p> -->
+        <p>
+        <p><b>后端屏蔽：</b>返回数据不包含被屏蔽的视频，可能存在误判。</p>
+        <p><b>前端屏蔽：</b>返回数据包含被屏蔽的视频，屏蔽由网页处理。</p>
+        </p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -48,8 +62,9 @@ import { saveAs } from 'file-saver'
 import { groupData } from '../utils/group';
 import VideoListPage from "../components/VideoListPage.vue";
 import NotFound from "../components/NotFound.vue";
-
+import VideoTag from '../components/VideoTag.vue';
 import getVideoList from "../http/searchVideo";
+
 import { nextTick } from 'vue';
 
 export default {
@@ -57,14 +72,17 @@ export default {
   components: {
     VideoListPage,
     NotFound,
+    VideoTag
   },
   data() {
     return {
       rawData: [],
       total: 0,
-      ps: 100,
+      ps: 40,
       loading: true,
       hideUnrelatedData: true,
+      hideByBackend: true,
+      blockDataDialogVisible: false,
       needly_tags: [
         "真夏の夜の淫梦",
         "COOKIE☆",
@@ -86,29 +104,33 @@ export default {
     };
   },
   watch: {
-    $route: "getResultList",
+    $route: {
+      handler(n, o) {
+        const nkw = n.query.keyword, okw = o.query.keyword
+
+        if (this.keyword) {
+          this.hideByBackend = false
+        } else if (okw) {
+          this.hideByBackend = true
+        }
+        this.getResultList()
+      }
+    }
   },
   created() {
     this.getResultList();
   },
   computed: {
     keyword() {
-      return this.$route.query.keyword;
-    },
-    unrelatedDataRule() {
-      return `含有任意一个 ${this.check_tags.join(
-        ", "
-      )} 标签，但不含有任意一个 ${this.needly_tags.join(
-        ", "
-      )} 标签的视频，会被程序判断为无关视频并隐藏。`;
+      return this.$route.query.keyword?.trim();
     },
     unrelatedCount() {
       return this.rawData.length - this.data.length;
     },
     data() {
-      // if (!this.hideUnrelatedData) {
-      //   return this.rawData;
-      // }
+      if (!this.hideUnrelatedData || this.hideByBackend) {
+        return this.rawData;
+      }
 
       // 筛选出非屏蔽数据
       return this.rawData.filter((item) => {
@@ -116,7 +138,11 @@ export default {
       });
     },
     blockedData() {
-      return this.rawData.filter(item => !this.isWhiteListedItem(item))
+      if (this.hideUnrelatedData && !this.hideByBackend) {
+        return this.rawData.filter(item => !this.isWhiteListedItem(item))
+      }
+
+      return []
     }
   },
   props: {
@@ -124,7 +150,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          ps: 100,
+          ps: 40,
           pn: 1,
         };
       },
@@ -163,11 +189,14 @@ export default {
     },
     async getResultList() {
       this.loading = true;
-
+      this.rawData = []
+      // 启用后端屏蔽
+      const hide_block = this.hideUnrelatedData && this.hideByBackend
       try {
         const query = {
           ...this.$route.query,
-          ...this.params
+          ...this.params,
+          hide_block: +hide_block
         }
 
         const { total, data } = await getVideoList({
@@ -178,16 +207,6 @@ export default {
         // this.unrelatedCount = 0;
         this.total = total;
         this.rawData = data;
-
-        nextTick(() => {
-          // 有关键字搜索且无被屏蔽数据时，关闭无关筛选
-          if (this.keyword && !this.blockedData.length) {
-            this.hideUnrelatedData = false;
-          } else {
-            this.hideUnrelatedData = true
-          }
-        })
-
       } catch (e) {
         console.log(e);
         this.$message.error("获取数据失败，请稍后再试。");
@@ -210,3 +229,12 @@ export default {
   },
 };
 </script>
+
+<style lang="less">
+.dialog-message {
+  p {
+    margin-bottom: 5px;
+    margin-top: 0;
+  }
+}
+</style>

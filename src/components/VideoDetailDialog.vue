@@ -32,11 +32,11 @@
         <p>{{ detail.pubdate }}</p>
       </div>
 
-      <div v-if="detail.tags">
+      <div v-if="tags">
         <p class="dialog-title mb-2">标签</p>
         <p class="flex flex-wrap gap-2">
-          <span @click="search(tag, 'tags')" v-for="tag in detail.tags.split(' ')" class="tag">{{ tag
-          }}</span>
+          <VideoTag @click="search(tag, 'tags')" v-for="tag in tags.split(' ')">{{ tag
+          }}</VideoTag>
         </p>
       </div>
 
@@ -56,9 +56,10 @@
 
 <script>
 import VideoDescription from './VideoDescription.vue';
-
+import VideoTag from './VideoTag.vue';
 import { videoLink } from '../utils/video'
 import HighLightText from './HighLightText.vue';
+import { onMounted } from 'vue';
 
 export default {
   methods: {
@@ -75,6 +76,7 @@ export default {
   },
   components: {
     VideoDescription,
+    VideoTag,
     HighLightText
   },
   computed: {
@@ -85,6 +87,9 @@ export default {
       set() {
         this.close()
       }
+    },
+    tags() {
+      return this.detail.tags
     }
   },
   props: {
@@ -104,11 +109,6 @@ export default {
 <style lang="less" scoped>
 .video-left-options a {
   @apply mr-2;
-}
-
-.tag {
-  @apply py-1 px-2 rounded-2xl bg-gray-300/70 text-gray-600 text-sm cursor-pointer;
-  @apply hover: bg-gray-400/70;
 }
 
 .dialog-title {

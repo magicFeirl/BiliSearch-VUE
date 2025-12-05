@@ -107,7 +107,7 @@ export default {
         copyright_filter: "",
         keyword: "",
         pn: 1,
-        ps: 100,
+        ps: 40,
         join: false,
       },
       search_form_rules: {
